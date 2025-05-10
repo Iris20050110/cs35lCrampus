@@ -13,7 +13,7 @@ function App() {
     children: [{path: "/", element: <MainPage />}, 
         {path: "/login", element: <LoginPage />},
         {path: "/profile", element: <ProfilePage />},
-        {path: "/assignment", element: <AssignmentPage />},
+        {path: "/scheduler", element: <AssignmentPage />},
     ]}]);
 
   return <RouterProvider router={router} />
