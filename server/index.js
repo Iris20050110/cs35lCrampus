@@ -1,29 +1,35 @@
-require('dotenv').config();          //load .env 
-const express  = require('express');  
-const mongoose = require('mongoose'); 
-const cors     = require('cors');
+import dotenv from "dotenv";
+dotenv.config();
 
-const todosRouter = require('./routes/todos');
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
 
-const app  = express();
+import spotsRouter from "./routes/spots.js";
+
+const app = express();
 const PORT = process.env.PORT || 5000;
 
-//middleware
-app.use(cors());   
-app.use(express.json()); 
+// middleware
+app.use(cors());
+app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+// connect to Mongo
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-//todo
-app.use('/todos', todosRouter);
+// health check (optional)
+app.get("/", (_req, res) => res.send("API is running!"));
 
-app.get('/', (_req, res) => res.send('API is running!'));
+// routes
+app.use("/api/spots", spotsRouter);
 
+// start server
 app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
