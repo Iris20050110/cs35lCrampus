@@ -16,7 +16,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { text, dueDate } = req.body;
-    const todo = new Todo({ text, dueDate });
+    const localDue = parseLocalDate(dueDate);
+    const todo = new Todo({ text, dueDate: localDue });
     const saved = await todo.save();
     res.status(201).json(saved);
   } catch {
@@ -28,9 +29,10 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { completed, dueDate } = req.body;
+    const localDue = parseLocalDate(dueDate);
     const updated = await Todo.findByIdAndUpdate(
       req.params.id,
-      { completed, dueDate },
+      { completed, dueDate: localDue },
       { new: true }
     );
     if (!updated) return res.sendStatus(404);
