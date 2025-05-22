@@ -1,29 +1,43 @@
-require('dotenv').config();          //load .env 
-const express  = require('express');  
-const mongoose = require('mongoose'); 
-const cors     = require('cors');
+import dotenv from "dotenv";
+dotenv.config();
 
-const todosRouter = require('./routes/todos');
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 
-const app  = express();
+import spotsRouter from "./routes/spots.js";
+
+const app = express();
 const PORT = process.env.PORT || 5000;
 
-//middleware
-app.use(cors());   
-app.use(express.json()); 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+// Ensure uploads folder exists
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
 
-//todo
-app.use('/todos', todosRouter);
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use("/uploads", express.static(uploadsDir));
 
-app.get('/', (_req, res) => res.send('API is running!'));
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
+// Routes
+app.get("/", (_req, res) => res.send("API is running!"));
+app.use("/api/spots", spotsRouter);
+
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
