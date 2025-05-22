@@ -6,9 +6,9 @@ export default function SpotCard({ spot }) {
     tags = [],
     rating = 0,
     reviews = 0,
+    location = "",
   } = spot;
 
-  // Helper function to check if a location is currently open
   const isCurrentlyOpen = () => {
     if (!hours?.open || !hours?.close) return false;
 
@@ -18,17 +18,14 @@ export default function SpotCard({ spot }) {
       const currentMinute = now.getMinutes();
 
       const parseTime = (timeStr) => {
-        // Handle formats like "9:30am", "9am", "12pm", etc.
         const timeRegex = /(\d+)(?::(\d+))?\s*(am|pm)/i;
         const match = timeStr.match(timeRegex);
-
         if (!match) return null;
 
         let [_, hours, minutes, period] = match;
         hours = parseInt(hours, 10);
         minutes = minutes ? parseInt(minutes, 10) : 0;
 
-        // Convert to 24-hour format
         if (period.toLowerCase() === "pm" && hours < 12) {
           hours += 12;
         } else if (period.toLowerCase() === "am" && hours === 12) {
@@ -40,23 +37,18 @@ export default function SpotCard({ spot }) {
 
       const openTime = parseTime(hours.open);
       const closeTime = parseTime(hours.close);
-
       if (!openTime || !closeTime) return false;
 
-      // Convert current time to minutes since midnight for easier comparison
       const currentTimeInMinutes = currentHour * 60 + currentMinute;
       const openTimeInMinutes = openTime.hours * 60 + openTime.minutes;
       const closeTimeInMinutes = closeTime.hours * 60 + closeTime.minutes;
 
-      // Handle standard case (open and close on same day)
       if (openTimeInMinutes <= closeTimeInMinutes) {
         return (
           currentTimeInMinutes >= openTimeInMinutes &&
           currentTimeInMinutes <= closeTimeInMinutes
         );
-      }
-      // Handle overnight case (e.g., 10pm - 2am)
-      else {
+      } else {
         return (
           currentTimeInMinutes >= openTimeInMinutes ||
           currentTimeInMinutes <= closeTimeInMinutes
@@ -69,18 +61,31 @@ export default function SpotCard({ spot }) {
   };
 
   return (
-    <div className="w-full font-[calibri]">
-      {imageUrl && (
-        <img
-          src={imageUrl}
-          alt={name}
-          className="h-40 w-full object-cover rounded-xl mb-3"
-        />
-      )}
+    <div className="w-full font-[lexend]">
+      <img
+        src={
+          imageUrl?.startsWith("http")
+            ? imageUrl
+            : `${
+                import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
+              }${imageUrl}`
+        }
+        alt={name}
+        className="h-[275px] rounded-[13px]"
+      />
 
-      <h3 className="text-lg font-bold text-slate mb-1">{name}</h3>
+      <h3 className="text-[24px] font-extrabold text-[#1a3d3c] drop-shadow-sm tracking-wide mb-[4px] mt-[4px]">
+        {name}
+      </h3>
 
-      <p className="text-sm text-gray-700 mb-1">
+      {/* Address */}
+      <p className="text-[14px] text-[#4d4d4d] italic my-[2px]">
+        {typeof location === "string"
+          ? location
+          : location?.address || "No address provided"}
+      </p>
+
+      <p className="text-[17px] my-[5px] text-[#305252]">
         {hours?.open === "12:00am" && hours?.close === "11:59pm"
           ? "Open 24 Hours"
           : hours?.open && hours?.close
@@ -88,15 +93,15 @@ export default function SpotCard({ spot }) {
           : "Hours not available"}
       </p>
 
-      <div className="flex flex-wrap gap-2 mb-2">
+      <div className="flex flex-wrap my-[5px] justify-center font-[lexend]">
         {hours?.open &&
           hours?.close &&
           (isCurrentlyOpen() ? (
-            <span className="text-[12px] px-[9px] py-[4px] m-[4px] rounded-full bg-[#305252] text-[#FFFF]">
+            <span className="text-[15px] px-[9px] py-[4px] m-[4px] rounded-full bg-[#305252] text-[#FFFF]">
               Available
             </span>
           ) : (
-            <span className="text-[12px] px-[9px] py-[4px] m-[4px] rounded-full bg-[#A9A9A9] text-[#FFFF]">
+            <span className="text-[13px] px-[9px] py-[4px] m-[4px] rounded-full bg-[#A9A9A9] text-[#FFFF]">
               NOT AVAILABLE
             </span>
           ))}
@@ -104,15 +109,17 @@ export default function SpotCard({ spot }) {
         {tags.map((tag) => (
           <span
             key={tag}
-            className="text-[10px] px-[8px] py-[5px] m-[2px] rounded-[10px] bg-[#305252] text-[#DDDD]"
+            className="text-[11px] px-[8px] py-[9px] m-[2px] rounded-[14px] bg-[#b6244f] text-[#DDDD]"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      <div className="text-sm text-gray-800">
-        ★ {rating.toFixed(1)} ({reviews})
+      <div>
+        <span className="text-[13px]">
+        ⭐ {rating.toFixed(1)} ({reviews})
+        </span>
       </div>
     </div>
   );

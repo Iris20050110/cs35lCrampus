@@ -8,11 +8,12 @@ import NavBar from "../components/navbar";
 export default function MainPage() {
   const [spots, setSpots] = useState([]);
 
-  const fetchSpots = async (q = "") => {
+  const fetchSpots = async (q = "", tag = "") => {
     const { data } = await axios.get(
-      `/api/spots?search=${encodeURIComponent(q)}`
+      `/api/spots?search=${encodeURIComponent(q)}&tag=${encodeURIComponent(
+        tag
+      )}`
     );
-    console.log("📬 fetched spots payload:", data);
     setSpots(data);
   };
 
@@ -21,7 +22,7 @@ export default function MainPage() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden">
       <NavBar />
       {/* 1) HEADER */}
       <header
@@ -44,7 +45,7 @@ export default function MainPage() {
           Crampus
         </h1>
 
-        <div className="flex w-full sm:w-auto">
+        <div className="flex w-full sm:w-auto justify-center pb-[30px]">
           <SearchBar onSearch={fetchSpots} />
         </div>
       </header>
@@ -62,15 +63,19 @@ export default function MainPage() {
       <Link
         to="/add"
         className="
+        fixed m-[16px] 
+        bg-[#b6244f] hover:bg-amaranth/90 
+        p-[12px]
+        px-[20px]
+        rounded-full
+        text-[30px]
+        transition duration-300 ease-in-out z-[50px]
+        bottom-[32px] right-[48px]
         text-[#FFFF]
-        fixed bottom-6 right-6 
-        w-16 h-16 
-        bg-amaranth hover:bg-amaranth/90 
-        rounded-full flex items-center justify-center 
-        text-[30px] text-white shadow-lg 
-        transition duration-300 ease-in-out z-50"
+        font-[bold]
+        no-underline"
       >
-        +
+        ✚
       </Link>
     </div>
   );

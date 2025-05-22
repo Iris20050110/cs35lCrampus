@@ -19,7 +19,7 @@ export default function Navbar() {
         <Link
           key={path}
           to={path}
-          className={`text-[16px] px-[5px] py-[10px] rounded-md transition duration-200 hover:bg-[#3d6969] ${
+          className={`text-[16px] px-[5px] py-[10px] rounded-md transition duration-200 hover:bg-[#3d6969] no-underline text-[#242526] font-[calibri] ${
             isActive(path) ? "bg-tan font-semibold" : ""
           }`}
         >

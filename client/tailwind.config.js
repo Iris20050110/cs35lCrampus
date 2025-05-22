@@ -15,6 +15,7 @@ export default {
       },
       fontFamily: {
         yorkmade: ["Yorkmade", "sans-serif"],
+        lexend: ["'Lexend'", "sans-serif"],
       },
     },
   },

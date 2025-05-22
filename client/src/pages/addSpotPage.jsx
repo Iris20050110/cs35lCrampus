@@ -11,26 +11,40 @@ export default function AddSpotPage() {
   const [closeTime, setCloseTime] = useState("");
   const [is24Hours, setIs24Hours] = useState(false);
   const [tags, setTags] = useState("");
+  const [photo, setPhoto] = useState(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const spotData = {
-      name,
-      location,
-      description,
-      hours: is24Hours
-        ? { open: "12:00am", close: "11:59pm" }
-        : { open: openTime, close: closeTime },
-      tags: tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-    };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("location", location);
+    formData.append("description", description);
+    formData.append(
+      "hours",
+      JSON.stringify(
+        is24Hours
+          ? { open: "12:00am", close: "11:59pm" }
+          : { open: openTime, close: closeTime }
+      )
+    );
+    formData.append(
+      "tags",
+      JSON.stringify(
+        tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      )
+    );
+    if (photo) formData.append("photo", photo);
 
-    await axios.post("/api/spots", spotData);
+    await axios.post("/api/spots", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
     navigate("/");
   };
 
@@ -54,7 +68,6 @@ export default function AddSpotPage() {
           onChange={(e) => setLocation(e.target.value)}
           className="border px-[12px] py-[8px] rounded"
         />
-
         <div className="flex items-center gap-[8px]">
           <input
             type="checkbox"
@@ -67,7 +80,6 @@ export default function AddSpotPage() {
             Open 24 Hours
           </label>
         </div>
-
         <div className="flex gap-[8px]">
           <input
             type="text"
@@ -86,7 +98,6 @@ export default function AddSpotPage() {
             className="border px-[12px] py-[8px] rounded w-1/2 bg-white disabled:bg-gray-100"
           />
         </div>
-
         <textarea
           placeholder="Description"
           value={description}
@@ -101,6 +112,15 @@ export default function AddSpotPage() {
           onChange={(e) => setTags(e.target.value)}
           className="border px-[12px] py-[8px] rounded"
         />
+
+        {/* 📸 Photo input */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setPhoto(e.target.files[0])}
+          className="border px-[12px] py-[8px] rounded"
+        />
+
         <button
           type="submit"
           className="bg-green-600 text-white px-[16px] py-[8px] rounded"

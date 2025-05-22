@@ -7,7 +7,7 @@ import MainPage from "./pages/mainPage";
 import AddSpotPage from "./pages/addSpotPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
-import AssignmentPage from "./pages/AssignmentPage";
+import AssignmentPage from "./pages/assignmentPage";
 
 const router = createBrowserRouter([
   {
