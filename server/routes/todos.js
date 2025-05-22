@@ -1,6 +1,8 @@
-const express = require('express');
+import express from "express";
+import multer from "multer";
+import Todo from "../models/Todo.js";
+
 const router  = express.Router();
-const Todo    = require('../models/Todo');
 
 //get
 router.get('/', async (req, res) => {
@@ -53,4 +55,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

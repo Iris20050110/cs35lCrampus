@@ -18,6 +18,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+    --c-tan:       #ffe4d4;
+    --c-ash:       #b2d2c3;
+    --c-slate:     #305252;
+    --c-onyx:      #373e40;
+    --c-amaranth:  #b6244f;
 }
 
 a {
@@ -73,3 +79,50 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+/* TODO */
+
+@layer utilities {
+  /* retrofit a “divide-tan” that actually sets the Tailwind divide color */
+  .divide-tan > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-opacity: 1;
+    --tw-divide-color: var(--c-tan);
+  }
+}
+
+
+/* palette utilities */
+.bg-tan       { background-color: rgba(255, 228, 212, 0.6); }
+.bg-ash       { background-color: rgba(178, 210, 195, 0.7); }
+.bg-slate     { background-color: var(--c-slate); }
+.text-onyx    { color: var(--c-onyx); }
+.text-ash     { color: var(--c-ash); }
+.text-amaranth{ color: var(--c-amaranth); }
+.border-onyx  { border-color: var(--c-onyx) !important; }
+
+/* gradient variants for ash */
+.bg-gradient-ash {
+  background: linear-gradient(135deg, rgba(178, 210, 195, 0.7), rgba(158, 190, 175, 0.7));
+}
+
+.bg-gradient-ash-light {
+  background: linear-gradient(135deg, rgba(178, 210, 195, 0.7), rgba(198, 230, 215, 0.7));
+}
+
+.bg-gradient-ash-dark {
+  background: linear-gradient(135deg, rgba(158, 190, 175, 0.7), rgba(138, 170, 155, 0.7));
+}
+
+/* buttons for todos */
+.btn-nav {
+  padding: .5rem 1rem;
+  border: none;
+  border-radius: .25rem;
+  background-color: var(--c-slate);
+  color: white;
+  cursor: pointer;
+}
+
+/* list reset for todos */
+.list-none { list-style: none; margin:0; padding:0; }

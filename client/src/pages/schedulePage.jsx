@@ -16,7 +16,7 @@ export default function CreateTodo() {
   };
 
   return (
-    <div className="p-6 rounded-md max-w-md mx-auto">
+    <div className="p-6 w-full">
       <h1 className="text-2xl font-bold text-onyx mb-4">Add Your Tasks</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input

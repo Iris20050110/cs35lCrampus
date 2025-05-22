@@ -6,7 +6,7 @@ export default function TasksByWeek() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
-    axios.get('/todos').then((r) => setTodos(r.data));
+    axios.get('/api/todos').then((r) => setTodos(r.data));
   }, []);
 
   const getWeekStartDate = (date) => {
@@ -37,7 +37,7 @@ export default function TasksByWeek() {
   };
 
   const toggleTodo = async (todo) => {
-    const { data } = await axios.put(`/todos/${todo._id}`, {
+    const { data } = await axios.put(`/api/todos/${todo._id}`, {
       completed: !todo.completed,
       dueDate: todo.dueDate,
     });
@@ -45,7 +45,7 @@ export default function TasksByWeek() {
   };
 
   const deleteTodo = async (id) => {
-    await axios.delete(`/todos/${id}`);
+    await axios.delete(`/api/todos/${id}`);
     setTodos(todos.filter((x) => x._id !== id));
   };
 
@@ -90,13 +90,13 @@ export default function TasksByWeek() {
   };
 
   return (
-    <div className="w-[100%] mx-auto my-8 p-4 font-sans">
+    <div className="w-full my-8 p-4 font-sans">
       <div className="bg-gradient-ash shadow-md p-4 rounded-lg mb-6 flex items-center justify-between">
         <button onClick={() => shiftWeek(-1)} className="btn-nav font-bold">&#60;</button>
         <h2 className="text-2xl font-semibold text-onyx">{headerLabel}</h2>
         <button onClick={() => shiftWeek(1)} className="btn-nav font-bold">&gt;</button>
       </div>
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-2 w-full">
         {renderWeek()}
       </div>
     </div>

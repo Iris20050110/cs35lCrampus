@@ -9,6 +9,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 
 import spotsRouter from "./routes/spots.js";
+import todosRouter from "./routes/todos.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,9 +34,11 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+app.use("/api/spots", spotsRouter);
+app.use('/api/todos', todosRouter);
+
 // Routes
 app.get("/", (_req, res) => res.send("API is running!"));
-app.use("/api/spots", spotsRouter);
 
 // Start server
 app.listen(PORT, () => {
