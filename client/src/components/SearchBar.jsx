@@ -134,7 +134,7 @@ export default function SearchBar({ onSearch }) {
                 {suggestions.map((suggestion, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 hover:bg-green-50 cursor-pointer"
+                    className=""
                     onClick={() => {
                       setQuery(suggestion);
                       setSuggestions([]);

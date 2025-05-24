@@ -14,12 +14,12 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-[#b2d2c3] text-[#3d6969] px-6 py-3 flex justify-center gap-[24px] shadow-md rounded-[10px]">
+    <nav className="bg-[#b2d2c3] text-[#3d6969] mx-[100px] px-[6px] py-[3px] flex justify-center gap-[24px] shadow-md rounded-[10px] position-fixed">
       {navItems.map(({ path, label }) => (
         <Link
           key={path}
           to={path}
-          className={`text-[16px] px-[5px] py-[10px] rounded-md transition duration-200 hover:bg-[#3d6969] no-underline text-[#242526] font-[calibri] ${
+          className={`text-[16px] px-[5px] py-[10px] rounded-md transition duration-200 hover:bg-[#3d6969] no-underline text-[#242526] font-[lexend] ${
             isActive(path) ? "bg-tan font-semibold" : ""
           }`}
         >

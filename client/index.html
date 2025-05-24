@@ -4,26 +4,32 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Vite + React</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind config before Tailwind loads -->
     <script>
       tailwind = window.tailwind || {};
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              tan:   '#ffe4d4',
-              green: '#b2d2c3'
-            }
-          }
-        }
+              tan: "#ffe4d4",
+              green: "#b2d2c3",
+            },
+          },
+        },
       };
     </script>
-  
+
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Vite + React</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <div id="root"></div>

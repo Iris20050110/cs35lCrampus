@@ -61,7 +61,7 @@ export default function SpotCard({ spot }) {
   };
 
   return (
-    <div className="w-full font-[lexend]">
+    <div className="w-[full] font-[lexend]">
       <img
         src={
           imageUrl?.startsWith("http")

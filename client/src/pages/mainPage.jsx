@@ -22,12 +22,11 @@ export default function MainPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div className=" mx-[0px] pt-[20px] px-[auto] bg-tan min-w-screen min-h-screen">
       <NavBar />
       {/* 1) HEADER */}
       <header
         className="
-        sticky top-0
         flex flex-col sm:flex-row 
         items-center
       "
@@ -53,7 +52,7 @@ export default function MainPage() {
       <main className="px-8 py-6">
         <div className="flex flex-wrap gap-6 justify-center">
           {spots?.map((spot) => (
-            <div className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg">
+            <div className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg justify-center">
               <SpotCard key={spot._id} spot={spot} />
             </div>
           ))}
