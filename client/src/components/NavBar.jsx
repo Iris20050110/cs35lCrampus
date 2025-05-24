@@ -19,9 +19,9 @@ export default function Navbar() {
         <Link
           key={path}
           to={path}
-          className={`text-[16px] px-[5px] py-[10px] rounded-md transition duration-200 hover:bg-[#3d6969] no-underline text-[#242526] font-[lexend] ${
-            isActive(path) ? "bg-tan font-semibold" : ""
-          }`}
+          className={`text-[16px] px-[5px] py-[10px] rounded-md transition duration-200 no-underline font-[lexend] 
+    ${isActive(path) ? "bg-tan font-semibold" : "hover:bg-[#3d6969]"} 
+    text-[#242526] visited:text-[#242526] focus:text-[#242526]`}
         >
           {label}
         </Link>

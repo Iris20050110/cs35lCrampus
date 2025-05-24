@@ -130,7 +130,7 @@ export default function SearchBar({ onSearch }) {
 
             {/* Search Suggestions Dropdown */}
             {suggestions.length > 0 && (
-              <ul className="absolute z-3 bg-[#FFFF] rounded-[5px] text-left px-[9px] w-full p-[3px] max-h-[5] overflow-auto">
+              <ul className="absolute z-3 bg-[#FFFF] rounded-[5px] text-left px-[9px] w-full m-3 max-h-20 overflow-auto">
                 {suggestions.map((suggestion, index) => (
                   <li
                     key={index}
@@ -138,6 +138,7 @@ export default function SearchBar({ onSearch }) {
                     onClick={() => {
                       setQuery(suggestion);
                       setSuggestions([]);
+                      searchRef.current?.querySelector("input")?.focus();
                     }}
                   >
                     {suggestion}
@@ -149,25 +150,25 @@ export default function SearchBar({ onSearch }) {
 
           {/* Tag Input Container */}
           <div className="relative px-2" ref={tagDropdownRef}>
-            {/* Tag Input with Selected Tags Inside */}
             <div className="bg-[#D4DEDB] rounded-[5px] px-[5px] py-[5px] m-[5px] flex flex-wrap items-center gap-1">
-              {/* Selected Tags - displayed inside the input */}
               {selectedTags.map((tag) => (
                 <div
                   key={tag}
-                  className="flex items-center bg-[#b6244f] text-[#FFFF] px-[5px] py-1 rounded-full text-[12px] group hover:bg-teal-800"
+                  className="flex items-center bg-[#b6244f] text-[#FFFF] px-[10px] py-1 rounded-full text-[13px] group hover:scale-105"
                 >
                   {tag}
                   <button
                     type="button"
                     onClick={() => removeTag(tag)}
-                    className="ml-1 rounded-full h-[20px] bg-[#b6244f] text-[#FFFF] flex items-center justify-center hover:bg-teal-800 border-none"
+                    className="ml-1 text-[18px] p-[3px] rounded-full h-[10px] bg-[#b6244f] text-[#FFFF]
+             flex items-center justify-center border-none
+             focus:outline-none focus:ring-0 focus:border-none active:outline-none active:ring-0"
                   >
                     &times;
                   </button>
                 </div>
               ))}
-              
+
               {/* Tag Input */}
               <input
                 ref={tagInputRef}
@@ -177,20 +178,24 @@ export default function SearchBar({ onSearch }) {
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onFocus={() => setShowTagDropdown(true)}
+                onKeyDown={handleSearchKeyDown}
                 autoComplete="off"
               />
             </div>
 
             {/* Tag Suggestions Dropdown */}
             {showTagDropdown && tagSuggestions.length > 0 && (
-              <ul className="absolute z-10 bg-[#FFFF] border-none rounded-[8px] px-[9px] mt-1 right-0 max-h-5 overflow-auto">
+              <ul className="absolute z-[100px] bg-[#FFFF] border-none rounded-[8px] px-[9px] m-1.5 max-h-20 overflow-auto">
                 {tagSuggestions
                   .filter((tag) => !selectedTags.includes(tag))
                   .map((tag, index) => (
                     <li
                       key={index}
-                      className="px-4 py-2 hover:bg-green-50 cursor-pointer"
-                      onClick={() => addTag(tag)}
+                      className="px-4 py-2 cursor-pointer"
+                      onClick={() => {
+                        addTag(tag);
+                        searchRef.current?.querySelector("input")?.focus();
+                      }}
                     >
                       {tag}
                     </li>
@@ -203,7 +208,7 @@ export default function SearchBar({ onSearch }) {
           <button
             type="button"
             onClick={handleSubmit}
-            className=" text-[15px] bg-[#305252] text-[#FFFF] px-[10px] py-[6px] rounded-full border-none"
+            className=" text-[15px] bg-[#305252] text-[#FFFF] px-[13px] py-[6px] mx-[2px] rounded-full border-none hover:scale-105 focus:outline-none focus:ring-0"
           >
             ⌕
           </button>

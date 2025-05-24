@@ -58,7 +58,7 @@ export default function TasksByWeek() {
         return dueDate.toDateString() === currentDay.toDateString();
       });
       return (
-        <div key={i} className="flex-1 bg-gradient-ash p-2 m-1 rounded-lg shadow-md min-h-[250px]">
+        <div key={i} className="font-[lexend] flex-1 bg-gradient-ash p-2 m-1 rounded-lg shadow-md min-h-[250px]">
           <h3 className="text-center text-oynx text-lg font-semibold mb-2">{currentDay.toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' })}</h3>
           {dayTasks.length > 0 ? (
             <ul>
@@ -90,7 +90,7 @@ export default function TasksByWeek() {
   };
 
   return (
-    <div className="w-full my-8 p-4 font-sans">
+    <div className="font-[lexend] w-full my-8 p-4 font-sans">
       <div className="bg-gradient-ash shadow-md p-4 rounded-lg mb-6 flex items-center justify-between">
         <button onClick={() => shiftWeek(-1)} className="btn-nav font-bold">&#60;</button>
         <h2 className="text-2xl font-semibold text-onyx">{headerLabel}</h2>

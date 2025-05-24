@@ -49,7 +49,7 @@ export default function AddSpotPage() {
   };
 
   return (
-    <div className="p-[32px] max-w-[480px] mx-auto">
+    <div className="p-[32px] mx-auto min-w-screen min-h-screen">
       <NavBar />
       <h1 className="text-[24px] font-bold mb-[16px]">Add a Study Spot</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-[16px]">

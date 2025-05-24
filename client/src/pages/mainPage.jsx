@@ -62,19 +62,23 @@ export default function MainPage() {
       <Link
         to="/add"
         className="
-        fixed m-[16px] 
-        bg-[#b6244f] hover:bg-amaranth/90 
-        p-[12px]
-        px-[20px]
-        rounded-full
-        text-[30px]
-        transition duration-300 ease-in-out z-[50px]
-        bottom-[32px] right-[48px]
-        text-[#FFFF]
-        font-[bold]
-        no-underline"
+    fixed m-[16px] 
+    bg-[#b6244f]
+    hover:scale-110
+    py-[8px]
+    px-[20px]
+    rounded-full
+    text-[30px]
+    transition duration-300 ease-in-out z-[50]
+    bottom-[32px] right-[48px]
+    text-white
+    font-bold
+    no-underline
+    focus:outline-none focus:ring-0
+    hover:text-white focus:text-white active:text-white visited:text-white
+  "
       >
-        ✚
+        +
       </Link>
     </div>
   );
