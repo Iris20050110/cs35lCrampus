@@ -6,7 +6,7 @@ const cors     = require('cors');
 const todosRouter = require('./routes/todos');
 
 const app  = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 
 //middleware
 app.use(cors());   
@@ -27,3 +27,6 @@ app.get('/', (_req, res) => res.send('API is running!'));
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });
+
+const userRoutes = require('./routes/user');
+app.use('/api/auth', userRoutes);
