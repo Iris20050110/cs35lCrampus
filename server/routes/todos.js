@@ -1,6 +1,12 @@
-const express = require('express');
+import express from "express";
+import multer from "multer";
+import Todo from "../models/Todo.js";
+
+function parseLocalDate(str) {
+    return new Date(str + "T00:00:00");
+  }
+
 const router  = express.Router();
-const Todo    = require('../models/Todo');
 
 //get
 router.get('/', async (req, res) => {
@@ -13,24 +19,30 @@ router.get('/', async (req, res) => {
 });
 
 //post
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
+  console.log("POST /api/todos body:", req.body);
   try {
-    const { text, dueDate } = req.body;
-    const todo = new Todo({ text, dueDate });
-    const saved = await todo.save();
-    res.status(201).json(saved);
-  } catch {
-    res.status(400).json({ error: 'Invalid input' });
+    const { text, dueDate } = req.body;                     // ← pull fields out
+    const newTodo = await Todo.create({
+      text,
+      dueDate: parseLocalDate(dueDate)                     // ← use our helper
+    });
+    res.status(201).json(newTodo);
+  } catch (err) {
+    console.error("POST /api/todos error:", err);
+    res.status(400).json({ error: err.message });
   }
 });
+
 
 //put
 router.put('/:id', async (req, res) => {
   try {
     const { completed, dueDate } = req.body;
+    const localDue = parseLocalDate(dueDate);
     const updated = await Todo.findByIdAndUpdate(
       req.params.id,
-      { completed, dueDate },
+      { completed, dueDate: localDue },
       { new: true }
     );
     if (!updated) return res.sendStatus(404);
@@ -51,4 +63,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
