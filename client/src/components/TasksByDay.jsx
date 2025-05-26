@@ -54,7 +54,8 @@ export default function TasksByWeek() {
       const currentDay = new Date(weekStartDate);
       currentDay.setDate(currentDay.getDate() + i);
       const dayTasks = todos.filter((todo) => {
-        const dueDate = new Date(todo.dueDate);
+        const dueDate = new Date(todo.dueDate)
+        dueDate.setDate(dueDate.getDate() - 1)
         return dueDate.toDateString() === currentDay.toDateString();
       });
       return (
@@ -75,8 +76,8 @@ export default function TasksByWeek() {
                 </div>
                 <button
                     onClick={() => deleteTodo(todo._id)}
-                    className="ml-2 text-amaranth font-bold self-center relative right-2"
-                    >✕</button>
+                    className="ml-2 text-2xl text-amaranth bg-transparent self-center relative right-2"
+                    >&times;</button>
               </li>
               
               ))}
@@ -102,5 +103,4 @@ export default function TasksByWeek() {
     </div>
   );
 }
-
 

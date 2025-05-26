@@ -6,6 +6,10 @@ import NavBar from "../components/navbar";
 const AssignmentPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const toggleDropdown = () => {
+    setShowDropdown((open) => !open)
+  }
+
   return (
     <div className="bg-tan min-w-screen min-h-screen font-[lexend] p-6">
       <div className="w-full mb-4 m">
@@ -18,7 +22,7 @@ const AssignmentPage = () => {
         </h1>
         <div className="flex justify-end relative w-full">
           <button
-            onClick={() => setShowDropdown((open) => !open)}
+            onClick={toggleDropdown}
             className="btn-nav"
           >
             + New Todo
@@ -35,11 +39,11 @@ const AssignmentPage = () => {
                   <div className="relative bg-opacity-100 bg-tan rounded-lg shadow-lg w-full max-w-xl">
                     <button
                       onClick={() => setShowDropdown(false)}
-                      className="absolute top-2 right-2 text-2xl font-[bold] text-amaranth"
+                      className="absolute top-2 right-2 text-3xl font-[bold] bg-transparent text-amaranth"
                     >
                       &times;
                     </button>
-                    <CreateTodo />
+                    <CreateTodo dropdown={toggleDropdown}/>
                   </div>
                 </div>
               </div>
