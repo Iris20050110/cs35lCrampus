@@ -42,5 +42,8 @@ app.get("/", (_req, res) => res.send("API is running!"));
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server listening on http://localhost:${PORT}`);
 });
+
+const userRoutes = require('./routes/user');
+app.use('/api/auth', userRoutes);
