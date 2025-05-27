@@ -1,11 +1,23 @@
-module.exports = {
-  content: ["./index.html","./src/**/*.{js,jsx,ts,tsx}"],
+// tailwind.config.js
+import scrollbarHide from "tailwind-scrollbar-hide";
+import forms from "@tailwindcss/forms";
+
+export default {
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors: { tan: "#ffe4d4", green: "#b2d2c3" }
-    }
+      colors: {
+        tan: "#ffe4d4",
+        ash: "#b2d2c3",
+        slate: "#305252",
+        onyx: "#373e40",
+        amaranth: "#b6244f",
+      },
+      fontFamily: {
+        yorkmade: ["Yorkmade", "sans-serif"],
+        lexend: ["'Lexend'", "sans-serif"],
+      },
+    },
   },
-  plugins: [require('tailwind-scrollbar-hide'), require('@tailwindcss/forms')],
-}
-
-  
+  plugins: [scrollbarHide, forms],
+};

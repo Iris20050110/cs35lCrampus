@@ -1,5 +1,4 @@
-// Todo list for users to add tasks
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 //text: the task description
 //completed: whether it’s done or not
@@ -10,4 +9,5 @@ const todoSchema = new mongoose.Schema({
   dueDate:   { type: Date, required: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Todo', todoSchema);
+const Todo = mongoose.model("Todo", todoSchema);
+export default Todo;
