@@ -39,7 +39,7 @@ export default function MainPage() {
         font-[yorkmade] 
         text-[#305252]
         text-center
-        text-[75px]"
+        text-[90px]"
         >
           Crampus
         </h1>
