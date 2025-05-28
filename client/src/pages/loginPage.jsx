@@ -60,6 +60,7 @@
 
 
 import React, { useState } from 'react';
+import NavBar from '../components/navbar';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -90,6 +91,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100">
+      <NavBar />
       <h2 className="text-2xl font-bold mb-6">Login</h2>
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-80">
         <input
