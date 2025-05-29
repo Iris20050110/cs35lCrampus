@@ -64,4 +64,18 @@ router.post("/", upload.single("photo"), async (req, res, next) => {
   }
 });
 
+// GET /api/spots/:id - get spot by id
+router.get("/:id", async (req, res) => {
+  try {
+    const spot = await Spot.findById(req.params.id);
+    if (!spot) {
+      return res.status(404).json({ error: "Spot not found" });
+    }
+    res.json(spot);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch spot" });
+  }
+});
+
 export default router;
