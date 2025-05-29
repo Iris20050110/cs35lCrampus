@@ -1,22 +1,29 @@
-import React from 'react'
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import LoginPage from './pages/loginPage'
-import MainPage from './pages/mainPage'
-import ProfilePage from './pages/profilePage'
-import AssignmentPage from './pages/assignmentPage'
-import MainLayout from './layout/mainLayout'
+// src/App.jsx
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-function App() {
-  const router = createBrowserRouter([{ 
-    path: "",
-    element: <MainLayout />, 
-    children: [{path: "/", element: <MainPage />}, 
-        {path: "/login", element: <LoginPage />},
-        {path: "/profile/:id", element: <ProfilePage />},
-        {path: "/assignment", element: <AssignmentPage />},
-    ]}]);
+import MainLayout from "./layout/MainLayout";
+import MainPage from "./pages/mainPage";
+import AddSpotPage from "./pages/addSpotPage";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/profilePage";
+import AssignmentPage from "./pages/assignmentPage";
 
-  return <RouterProvider router={router} />
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainLayout />, // your layout wrapper
+    children: [
+      { index: true, element: <MainPage /> }, // renders at "/"
+      { path: "add", element: <AddSpotPage /> }, // renders at "/add"
+      { path: "login", element: <LoginPage /> },
+      { path: "profile", element: <ProfilePage /> },
+      { path: "todos", element: <AssignmentPage /> },
+    ],
+  },
+]);
+
+export default function App() {
+  return <
+    RouterProvider router={router} />;
 }
-
-export default App
