@@ -12,7 +12,7 @@ function App() {
     element: <MainLayout />, 
     children: [{path: "/", element: <MainPage />}, 
         {path: "/login", element: <LoginPage />},
-        {path: "/profile", element: <ProfilePage />},
+        {path: "/profile/:id", element: <ProfilePage />},
         {path: "/assignment", element: <AssignmentPage />},
     ]}]);
 
