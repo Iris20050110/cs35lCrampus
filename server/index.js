@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 
 import spotsRouter from "./routes/spots.js";
 import todosRouter from "./routes/todos.js";
+import userRoutes from "./routes/user.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,16 +35,15 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+// Routers
 app.use("/api/spots", spotsRouter);
-app.use('/api/todos', todosRouter);
+app.use("/api/todos", todosRouter);
+app.use("/api/auth", userRoutes);
 
-// Routes
+// Default route
 app.get("/", (_req, res) => res.send("API is running!"));
 
 // Start server
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });
-
-const userRoutes = require('./routes/user');
-app.use('/api/auth', userRoutes);
