@@ -3,26 +3,30 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
     email: {
       type: String,
       required: true,
       unique: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
+    password: String, // not required for Google
     name: {
       type: String,
       required: true,
     },
+    picture: String, // optional profile photo
   },
   { timestamps: true }
 );
 
-// Hash password before save
+
+// Hash password only if it's a local user
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || !this.password) return next();
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -32,6 +36,7 @@ userSchema.pre("save", async function (next) {
   }
 });
 
+// For password login
 userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
