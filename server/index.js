@@ -42,7 +42,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      callbackURL: "/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -92,32 +92,21 @@ app.use(express.json());
 app.use("/uploads", express.static(uploadsDir));
 app.use("/api/auth", googleAuthRouter);
 
+console.log("Connecting to:", process.env.MONGO_URI);
+
+// MongoDB connection: 
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
 app.use("/api/spots", spotsRouter);
 app.use('/api/todos', todosRouter);
 
 // Routes
 app.get("/", (_req, res) => res.send("API is running!"));
 
-const startServer = async () => {
-  try {
-    // MongoDB connection
-    console.log("🚧 Connecting to MongoDB...");
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB connected successfully");
-
-    // Start server only after DB is ready
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error("❌ Failed to connect to MongoDB:");
-    console.error("Error name:", error.name);
-    console.error("Error message:", error.message);
-    if (error.reason) {
-      console.error("Error reason:", error.reason);
-    }
-    process.exit(1);
-  }
-};
-
-startServer();
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

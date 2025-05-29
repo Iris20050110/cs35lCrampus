@@ -74,18 +74,18 @@ export default function SpotCard({ spot }) {
         className="h-[275px] rounded-[13px]"
       />
 
-      <h3 className="text-[24px] font-extrabold text-[#1a3d3c] drop-shadow-sm tracking-wide mb-[4px] mt-[4px]">
+      <h3 className="ml-[6px] text-[24px] font-extrabold text-[#1a3d3c] drop-shadow-sm tracking-wide mb-[4px] mt-[4px]">
         {name}
       </h3>
 
       {/* Address */}
-      <p className="text-[14px] text-[#4d4d4d] italic my-[2px]">
+      <p className="ml-[6px] text-[14px] text-[#4d4d4d] italic my-[2px]">
         {typeof location === "string"
           ? location
           : location?.address || "No address provided"}
       </p>
 
-      <p className="text-[17px] my-[5px] text-[#305252]">
+      <p className="ml-[6px] text-[17px] my-[5px] text-[#305252]">
         {hours?.open === "12:00am" && hours?.close === "11:59pm"
           ? "Open 24 Hours"
           : hours?.open && hours?.close
@@ -117,7 +117,7 @@ export default function SpotCard({ spot }) {
       </div>
 
       <div>
-        <span className="text-[13px]">
+      <span className="flex flex-wrap mt-[5px] pt-[5px] ml-[5px] justify-center font-[lexend] text-[14px]">
         ⭐ {rating.toFixed(1)} ({reviews})
         </span>
       </div>

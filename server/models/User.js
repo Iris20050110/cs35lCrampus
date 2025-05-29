@@ -24,9 +24,9 @@ const userSchema = new mongoose.Schema(
 );
 
 
-// Hash password only if it's a local user
+// Hash password before saving
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password") || !this.password) return next();
+  if (!this.isModified("password")) return next();
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -38,8 +38,12 @@ userSchema.pre("save", async function (next) {
 
 // For password login
 userSchema.methods.comparePassword = function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+    return bcrypt.compare(candidatePassword, this.password);
 };
+  
+// Export model
+// Export model
+// module.exports = mongoose.model('User', userSchema);
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 export default User;

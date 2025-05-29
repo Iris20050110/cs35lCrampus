@@ -1,10 +1,10 @@
-import express from "express";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
