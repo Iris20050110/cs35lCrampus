@@ -29,7 +29,7 @@ export default function MoreInformationPage() {
   if (!spot) return <div>No spot found.</div>;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
+    <div className="font-[lexend] p-8 max-w-4xl mx-auto">
       <Link to="/" className="underline mb-4 inline-block">
         ← Back to all spots
       </Link>

@@ -10,7 +10,9 @@ export default function MainPage() {
 
   const fetchSpots = async (q = "", tag = "") => {
     const { data } = await axios.get(
-      `/api/spots?search=${encodeURIComponent(q)}&tag=${encodeURIComponent(tag)}`
+      `/api/spots?search=${encodeURIComponent(q)}&tag=${encodeURIComponent(
+        tag
+      )}`
     );
     setSpots(data);
   };
@@ -35,7 +37,7 @@ export default function MainPage() {
           {spots?.map((spot) => (
             <div
               key={spot._id}
-              className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg justify-center"
+              className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg justify-center transition-transform duration-300 hover:scale-103 hover:shadow-2xl"
             >
               <Link to={`/spots/${spot._id}`}>
                 <SpotCard spot={spot} />
@@ -47,8 +49,8 @@ export default function MainPage() {
       <Link
         to="/add"
         className="
-          fixed m-[16px] bg-[#b6244f] hover:scale-110 py-[8px] px-[20px]
-          rounded-full text-[30px] transition duration-300 ease-in-out z-[50]
+          fixed m-[10px] bg-[#b6244f] hover:scale-110 py-[8px] px-[25px] pb-[10px]
+          rounded-full text-[40px] transition duration-300 ease-in-out z-[50]
           bottom-[32px] right-[48px] text-white font-bold no-underline
           focus:outline-none focus:ring-0 hover:text-white focus:text-white
           active:text-white visited:text-white
