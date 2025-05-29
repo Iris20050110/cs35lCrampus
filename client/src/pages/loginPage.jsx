@@ -14,7 +14,7 @@ const LoginPage = () => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('http://localhost:5050/api/auth/check', {
+      const response = await fetch('http://localhost:5000/api/auth/check', {
         credentials: 'include' // Important for cookies
       });
       const data = await response.json();
@@ -30,7 +30,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5050/api/auth/login', {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -52,7 +52,7 @@ const LoginPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.open("http://localhost:5050/api/auth/google", "_self");
+    window.open("http://localhost:5000/api/auth/google", "_self");
   };
 
   return (
