@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NavBar from "../components/navbar";
 import useAuth from "../hooks/useAuth";
+import LoginRequired from "../components/LoginRequired";
 
 export default function AddSpotPage() {
   const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false });
@@ -59,32 +60,16 @@ export default function AddSpotPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#fef6ee] flex flex-col items-center justify-center text-center p-8">
-        <NavBar />
-        <div className="bg-white p-6 rounded-lg shadow-md max-w-md mt-6">
-          <h2 className="text-2xl font-semibold text-[#305252] mb-4">
-            UCLA Login Required
-          </h2>
-          <p className="text-gray-700 mb-6">
-            You must be signed in with a UCLA email to add a study spot.
-          </p>
-          <a
-            href="http://localhost:5000/api/auth/google"
-            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded transition"
-          >
-            Sign in with Google
-          </a>
-        </div>
-      </div>
+      <LoginRequired message="You must be signed in with a UCLA email to add a study spot." />
     );
   }
 
   return (
-    <div className="h-screen w-screen bg-[#fef6ee] flex flex-col overflow-auto">
+    <div className="pt-5 h-screen w-screen bg-tan flex flex-col overflow-auto font-[lexend]">
       <NavBar />
       <div className="flex-1 flex justify-center items-start px-4 py-8">
-        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-8">
-          <h1 className="text-center text-[28px] font-extrabold text-[#1a3d3c] mb-6">
+        <div className="w-full max-w-4xl bg-[#bfd9cd] rounded-2xl shadow-lg p-8">
+          <h1 className="text-center text-[28px] font-extrabold text-slate mb-6">
             Add a Study Spot
           </h1>
 
@@ -94,15 +79,17 @@ export default function AddSpotPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Name"
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base"
               required
+              className="border-[1.7px] border-[#75767B] bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
             />
+
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Location"
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base"
+              required
+              className="border-[1.7px] border-[#75767B] bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
             />
 
             <div className="flex items-center gap-3">
@@ -125,15 +112,22 @@ export default function AddSpotPage() {
                 value={openTime}
                 onChange={(e) => setOpenTime(e.target.value)}
                 disabled={is24Hours}
-                className="w-1/2 bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base"
+                required={!is24Hours}
+                pattern="^(0?[1-9]|1[0-2]):[0-5][0-9](am|pm)$"
+                title="Enter time in format hh:mmam or hh:mmpm (e.g. 9:00am)"
+                className="border-[1.7px] border-[#75767B] w-1/2 bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
               />
+
               <input
                 type="text"
                 placeholder="Close (e.g. 5:00pm)"
                 value={closeTime}
                 onChange={(e) => setCloseTime(e.target.value)}
                 disabled={is24Hours}
-                className="w-1/2 bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base"
+                required={!is24Hours}
+                pattern="^(0?[1-9]|1[0-2]):[0-5][0-9](am|pm)$"
+                title="Enter time in format hh:mmam or hh:mmpm (e.g. 5:00pm)"
+                className="border-[1.7px] border-[#75767B] w-1/2 bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
               />
             </div>
 
@@ -142,7 +136,8 @@ export default function AddSpotPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base resize-vertical min-h-[100px]"
+              required
+              className="border-[1.7px] border-[#75767B] bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base resize-vertical min-h-[100px] focus:outline-none focus:ring-0 focus:border-[#75767B]"
             />
 
             <input
@@ -150,18 +145,19 @@ export default function AddSpotPage() {
               placeholder="Tags (comma-separated)"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base"
+              className="border-[1.7px] border-[#75767B] bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
             />
 
             <div className="flex flex-col gap-2">
               <label className="text-base font-medium text-[#1a3d3c]">
-                Photo (optional)
+                Photo <span className="text-red-600">*</span>
               </label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setPhoto(e.target.files[0])}
-                className="text-base p-2 border border-gray-300 rounded-md"
+                required
+                className="border-[1.7px] border-[#75767B] text-base p-2 rounded-md focus:outline-none focus:ring-0 focus:border-[#75767B]"
               />
             </div>
 
