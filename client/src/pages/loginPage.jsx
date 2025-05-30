@@ -29,7 +29,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="p-[32px] mx-auto min-w-screen min-h-screen flex flex-col">
+    <div className="p-[32px] mx-auto bg-tan min-w-screen min-h-screen flex flex-col">
       <NavBar />
 
       {/* Sign in with Google */}
