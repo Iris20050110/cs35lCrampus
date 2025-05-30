@@ -6,14 +6,13 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check authentication status when component mounts
     checkAuthStatus();
   }, []);
 
   const checkAuthStatus = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/auth/check', {
-        credentials: 'include' // Important for cookies
+        credentials: 'include' // for cookies?
       });
       const data = await response.json();
       

@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NavBar from "../components/navbar";
+import useAuth from "../hooks/useAuth";
 
 export default function AddSpotPage() {
+  const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false }); // 🛑 don't auto-redirect
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
@@ -47,6 +49,36 @@ export default function AddSpotPage() {
 
     navigate("/");
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-gray-600">
+        Checking sign-in status...
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-center p-8 bg-[#fdfcf9]">
+        <NavBar />
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-md mt-6">
+          <h2 className="text-2xl font-semibold text-[#305252] mb-4">
+            UCLA Login Required
+          </h2>
+          <p className="text-gray-700 mb-6">
+            You must be signed in with a UCLA email to add a study spot.
+          </p>
+          <a
+            href="http://localhost:5000/api/auth/google"
+            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded transition"
+          >
+            Sign in with Google
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-[32px] mx-auto min-w-screen min-h-screen">
@@ -112,15 +144,12 @@ export default function AddSpotPage() {
           onChange={(e) => setTags(e.target.value)}
           className="border px-[12px] py-[8px] rounded"
         />
-
-        {/* 📸 Photo input */}
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setPhoto(e.target.files[0])}
           className="border px-[12px] py-[8px] rounded"
         />
-
         <button
           type="submit"
           className="bg-green-600 text-white px-[16px] py-[8px] rounded"
