@@ -6,8 +6,8 @@ import useAuth from "../hooks/useAuth";
 import LoginRequired from "../components/LoginRequired";
 
 const AssignmentPage = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false });
+  const [showDropdown, setShowDropdown] = useState(false)
+  const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false })
 
   const toggleDropdown = () => {
     setShowDropdown((open) => !open);
@@ -45,7 +45,7 @@ const AssignmentPage = () => {
                   <div className="relative bg-opacity-100 bg-tan rounded-lg shadow-lg w-full max-w-xl">
                     <button
                       onClick={() => setShowDropdown(false)}
-                      className="absolute top-2 right-2 text-3xl font-[bold] bg-transparent text-amaranth"
+                      className="absolute top-2 right-2 p-1 text-3xl font-[bold] bg-transparent text-amaranth"
                     >
                       &times;
                     </button>
