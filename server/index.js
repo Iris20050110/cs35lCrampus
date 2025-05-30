@@ -49,6 +49,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+function ensureAuth(req, res, next) {
+  if (req.isAuthenticated && req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ error: 'Not authenticated' });
+}
+
+// Passport Google Strategy
 passport.use(
   new GoogleStrategy(
     {
@@ -105,7 +113,8 @@ mongoose
 // routes
 app.use("/api/auth", googleAuthRouter);
 app.use("/api/spots", spotsRouter);
-app.use("/api/todos", todosRouter);
+app.use('/api/todos', todosRouter);
+app.use('/api/tasks', ensureAuth, todosRouter);
 
 app.get("/", (_req, res) => res.send("API is running!"));
 

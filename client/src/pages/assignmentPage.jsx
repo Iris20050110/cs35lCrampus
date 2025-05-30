@@ -2,12 +2,36 @@ import React, { useState } from "react";
 import TasksByDay from "../components/tasksByDay";
 import CreateTodo from "./schedulePage";
 import NavBar from "../components/navbar";
+import useAuth from "../hooks/useAuth";
 
 const AssignmentPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false });
 
   const toggleDropdown = () => {
     setShowDropdown((open) => !open)
+  }
+
+  if(!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-center p-8 bg-[#fdfcf9]">
+        <NavBar />
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-md mt-6">
+          <h2 className="text-2xl font-semibold text-[#305252] mb-4">
+            UCLA Login Required
+          </h2>
+          <p className="text-gray-700 mb-6">
+            You must be signed in with a UCLA email to add a study spot.
+          </p>
+          <a
+            href="http://localhost:5000/api/auth/google"
+            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded transition"
+          >
+            Sign in with Google
+          </a>
+        </div>
+      </div>
+    );
   }
 
   return (
