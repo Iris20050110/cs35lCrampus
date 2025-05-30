@@ -1,7 +1,5 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MoreInformationPage from "./pages/MoreInformationPage.jsx";  // adjust path if needed
-
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -11,7 +9,8 @@ import AddSpotPage from "./pages/addSpotPage";
 import LoginPage from "./pages/loginPage";
 import ProfilePage from "./pages/profilePage";
 import AssignmentPage from "./pages/assignmentPage";
-import SignUpPage from "./pages/signUpPage";
+import MoreInformationPage from "./pages/MoreInformationPage";  // adjust path if needed
+
 
 const router = createBrowserRouter([
   {
@@ -23,6 +22,7 @@ const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "todos", element: <AssignmentPage /> },
+      { path: "spots/:id", element: <MoreInformationPage /> },
     ],
   },
 ]);

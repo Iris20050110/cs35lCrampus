@@ -65,7 +65,7 @@ passport.use(
           });
         }
 
-        return done(null, user); // ✅ store user in session
+        return done(null, user);
       } catch (err) {
         return done(err, null);
       }
