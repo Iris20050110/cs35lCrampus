@@ -10,18 +10,18 @@ export default function CreateTodo({dropdown}) {
   const [error, setError]     = useState("")
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!text.trim()) return;
+    e.preventDefault()
+    if (!text.trim()) return
 
     try {
-      await axios.post("/api/todos", { text, dueDate });
-      setText("");
-      setDueDate(new Date().toISOString().slice(0, 10));
-      dropdown();
-      window.location.reload();
+      await axios.post("/api/todos", { text, dueDate })
+      setText("")
+      setDueDate(new Date().toISOString().slice(0, 10))
+      dropdown()
+      window.location.reload()
     } catch (err) {
-      console.error("Create todo error:", err.response || err);
-      setError(err.response?.data?.error || "Failed to create todo");
+      console.error("Create todo error:", err.response || err)
+      setError(err.response?.data?.error || "Failed to create todo")
     }
   };
 
@@ -29,7 +29,9 @@ export default function CreateTodo({dropdown}) {
     <div className="p-6 w-full font-[lexend]">
       {error && <p className="text-red-600 mb-2">{error}</p>}
 
-      <h1 className="text-2xl font-bold text-onyx mb-4">Add Your Tasks</h1>
+      <h1 className="text-2xl font-bold text-onyx mb-4 transition-transform duration-300 hover:scale-103 hover:shadow-2xl">
+        Add Your Tasks
+      </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
