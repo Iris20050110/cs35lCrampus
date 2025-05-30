@@ -5,6 +5,10 @@ import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import dotenv from "dotenv";
+import session from "express-session";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -81,6 +85,8 @@ passport.use(
             picture: profile.photos[0].value,
           });
         }
+        console.log("Google profile info:", profile);
+
 
         return done(null, user);
       } catch (err) {
@@ -88,6 +94,7 @@ passport.use(
       }
     }
   )
+  
 );
 
 passport.serializeUser((user, done) => {
@@ -105,10 +112,32 @@ passport.deserializeUser(async (id, done) => {
 
 // MongoDB connection
 console.log("Connecting to:", process.env.MONGO_URI);
+mongoose.set('strictQuery', false);
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017/crampus', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+    socketTimeoutMS: 45000, // Close sockets after 45s
+  })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1); // Exit if we can't connect to the database
+  });
+
+// Handle MongoDB connection errors after initial connection
+mongoose.connection.on('error', err => {
+  console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected. Attempting to reconnect...');
+});
+
+mongoose.connection.on('reconnected', () => {
+  console.log('MongoDB reconnected successfully');
+});
 
 // routes
 app.use("/api/auth", googleAuthRouter);

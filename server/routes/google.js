@@ -1,5 +1,6 @@
 import express from 'express';
 import passport from 'passport';
+import User from '../models/User.js';
 
 const router = express.Router();
 
@@ -23,14 +24,32 @@ router.get('/check', (req, res) => {
   }
 });
 
-// Logout route
-router.get('/logout', (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error logging out' });
+
+router.get('/logout', async (req, res) => {
+  console.log("Attempting logout...");
+  console.log("req.user:", req.user); // 🔍 See if user is set
+
+  try {
+    if (req.user) {
+      console.log("Deleting user from DB with id:", req.user._id);
+      await User.findByIdAndDelete(req.user._id);
+    } else {
+      console.log("No user found in session. Nothing to delete.");
     }
-    res.json({ success: true });
-  });
+
+    req.logout((err) => {
+      if (err) {
+        console.error("Logout error:", err);
+        return res.status(500).json({ error: 'Error logging out' });
+      }
+      console.log("Logout successful.");
+      res.json({ success: true });
+    });
+  } catch (err) {
+    console.error("Logout DB error:", err);
+    res.status(500).json({ error: 'Error removing user' });
+  }
 });
+
 
 export default router;
