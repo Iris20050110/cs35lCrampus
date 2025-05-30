@@ -24,3 +24,4 @@ app.use("/api/spots", spotsRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+a

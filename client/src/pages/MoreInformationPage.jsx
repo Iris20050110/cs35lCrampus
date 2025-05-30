@@ -15,7 +15,7 @@ export default function MoreInformationPage() {
         const res = await axios.get(`/api/spots/${id}`);
         setSpot(res.data);
         setError(null);
-      } catch (err) {
+      } catch {
         setError("Failed to load spot information.");
       } finally {
         setLoading(false);
@@ -36,8 +36,12 @@ export default function MoreInformationPage() {
 
       <h1 className="text-4xl font-bold mb-4">{spot.name}</h1>
       <p className="mb-2">{spot.description}</p>
-      <p><strong>Location:</strong> {spot.location}</p>
-      <p><strong>Tags:</strong> {spot.tags?.join(", ")}</p>
+      <p>
+        <strong>Location:</strong> {spot.location}
+      </p>
+      <p>
+        <strong>Tags:</strong> {spot.tags?.join(", ")}
+      </p>
 
       {spot.imageUrl && (
         <img

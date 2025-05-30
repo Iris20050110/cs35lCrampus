@@ -4,15 +4,14 @@ import Spot from "../models/Spot.js";
 
 const router = express.Router();
 
-// Configure multer to store uploads in /uploads
+// Multer storage config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
 });
-
 const upload = multer({ storage });
 
-// GET /api/spots?search=library&tag=quiet
+// GET spots
 router.get("/", async (req, res) => {
   const { search = "", tag = "" } = req.query;
   const filter = {};
@@ -29,7 +28,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/spots/suggestions?q=lib
+// GET spot suggestions
 router.get("/suggestions", async (req, res) => {
   const { q = "" } = req.query;
 
@@ -44,9 +43,13 @@ router.get("/suggestions", async (req, res) => {
   }
 });
 
-// POST /api/spots (with photo)
+// POST (requires login)
 router.post("/", upload.single("photo"), async (req, res, next) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
     const { name, location, description, tags, hours } = req.body;
 
     const spot = await Spot.create({
@@ -56,6 +59,7 @@ router.post("/", upload.single("photo"), async (req, res, next) => {
       tags: JSON.parse(tags),
       hours: JSON.parse(hours),
       imageUrl: req.file ? `/uploads/${req.file.filename}` : null,
+      userId: req.user._id, // 👈 save owner
     });
 
     res.status(201).json(spot);
@@ -64,17 +68,39 @@ router.post("/", upload.single("photo"), async (req, res, next) => {
   }
 });
 
-// GET /api/spots/:id - get spot by id
+// GET get spot by ID
 router.get("/:id", async (req, res) => {
   try {
     const spot = await Spot.findById(req.params.id);
-    if (!spot) {
-      return res.status(404).json({ error: "Spot not found" });
-    }
+    if (!spot) return res.status(404).json({ error: "Spot not found" });
     res.json(spot);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch spot" });
+  }
+});
+
+// DELETE (only by owner)
+router.delete("/:id", async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const spot = await Spot.findById(req.params.id);
+    if (!spot) return res.status(404).json({ error: "Spot not found" });
+
+    if (spot.userId.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to delete this spot." });
+    }
+
+    await Spot.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete spot" });
   }
 });
 

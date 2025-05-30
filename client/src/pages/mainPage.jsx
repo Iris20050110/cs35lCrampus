@@ -7,6 +7,7 @@ import NavBar from "../components/navbar";
 
 export default function MainPage() {
   const [spots, setSpots] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const fetchSpots = async (q = "", tag = "") => {
     const { data } = await axios.get(
@@ -17,8 +18,17 @@ export default function MainPage() {
     setSpots(data);
   };
 
+  const fetchUser = async () => {
+    const res = await fetch("http://localhost:5000/api/auth/check", {
+      credentials: "include",
+    });
+    const data = await res.json();
+    setCurrentUser(data.user);
+  };
+
   useEffect(() => {
     fetchSpots();
+    fetchUser();
   }, []);
 
   return (
@@ -40,7 +50,7 @@ export default function MainPage() {
               className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg justify-center transition-transform duration-300 hover:scale-103 hover:shadow-2xl"
             >
               <Link to={`/spots/${spot._id}`}>
-                <SpotCard spot={spot} />
+                <SpotCard spot={spot} currentUser={currentUser} />
               </Link>
             </div>
           ))}
@@ -48,13 +58,9 @@ export default function MainPage() {
       </main>
       <Link
         to="/add"
-        className="
-          fixed m-[10px] bg-[#b6244f] hover:scale-110 py-[8px] px-[25px] pb-[10px]
-          rounded-full text-[40px] transition duration-300 ease-in-out z-[50]
-          bottom-[32px] right-[48px] text-white font-bold no-underline
-          focus:outline-none focus:ring-0 hover:text-white focus:text-white
-          active:text-white visited:text-white
-        "
+        className="fixed m-[10px] bg-[#b6244f] hover:scale-110 py-[8px] px-[25px] pb-[10px]
+                   rounded-full text-[40px] transition duration-300 ease-in-out z-[50]
+                   bottom-[32px] right-[48px] text-white font-bold no-underline"
       >
         +
       </Link>

@@ -9,9 +9,14 @@ const spotSchema = new mongoose.Schema({
     open: String,
     close: String,
   },
-  imageUrl: String, // path to uploaded image
+  imageUrl: String,
   rating: { type: Number, default: 0 },
   reviews: { type: Number, default: 0 },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 const Spot = mongoose.model("Spot", spotSchema);
