@@ -60,7 +60,7 @@ export default function MainPage() {
         to="/add"
         className="fixed m-[10px] bg-[#b6244f] hover:scale-110 py-[8px] px-[25px] pb-[10px]
                    rounded-full text-[40px] transition duration-300 ease-in-out z-[50]
-                   bottom-[32px] right-[48px] text-white font-bold no-underline"
+                   bottom-[32px] right-[48px] text-white font-bold no-underline hover:text-white"
       >
         +
       </Link>
