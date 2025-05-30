@@ -5,7 +5,7 @@ import NavBar from "../components/navbar";
 import useAuth from "../hooks/useAuth";
 
 export default function AddSpotPage() {
-  const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false }); // 🛑 don't auto-redirect
+  const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false });
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
