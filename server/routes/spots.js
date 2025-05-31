@@ -1,15 +1,11 @@
 import express from "express";
-import multer from "multer";
+import mongoose from "mongoose";
+import { gfs, upload } from "../gridfs.js";
 import Spot from "../models/Spot.js";
+import fs from "fs";
+import path from "path";
 
 const router = express.Router();
-
-// Multer storage config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
-});
-const upload = multer({ storage });
 
 // GET spots
 router.get("/", async (req, res) => {
@@ -52,18 +48,47 @@ router.post("/", upload.single("photo"), async (req, res, next) => {
 
     const { name, location, description, tags, hours } = req.body;
 
+    let photoFileId = null;
+
+    if (req.file) {
+      const readStream = fs.createReadStream(req.file.path);
+
+      const uploadStream = gfs.openUploadStream(req.file.filename, {
+        contentType: req.file.mimetype,
+        metadata: {
+          originalname: req.file.originalname,
+        },
+      });
+
+      photoFileId = uploadStream.id;
+
+      readStream.pipe(uploadStream);
+
+      readStream.on("end", () => {
+        fs.unlink(req.file.path, (err) => {
+          if (err) console.error("Error deleting temp file:", err);
+        });
+      });
+    }
+
     const spot = await Spot.create({
       name,
       location,
       description,
       tags: JSON.parse(tags),
       hours: JSON.parse(hours),
-      imageUrl: req.file ? `/uploads/${req.file.filename}` : null,
-      userId: req.user._id, // 👈 save owner
+      photoFileId,
+      userId: req.user._id,
     });
 
     res.status(201).json(spot);
   } catch (err) {
+    if (req.file) {
+      fs.unlink(req.file.path, (unlinkErr) => {
+        if (unlinkErr) console.error("Error deleting temp file:", unlinkErr);
+      });
+    }
+    console.error("Error creating spot:", err);
     next(err);
   }
 });
@@ -80,7 +105,33 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// DELETE (only by owner)
+// GET /api/spots/image/:id
+router.get("/image/:id", async (req, res) => {
+  try {
+    const fileId = new mongoose.Types.ObjectId(req.params.id);
+
+    // Create download stream
+    const downloadStream = gfs.openDownloadStream(fileId);
+
+    // Set the proper content type
+    downloadStream.on("file", (file) => {
+      res.set("Content-Type", file.metadata.contentType);
+    });
+
+    // Pipe the file to the response
+    downloadStream.pipe(res);
+
+    // Handle errors
+    downloadStream.on("error", (error) => {
+      console.error("Error streaming file:", error);
+      res.status(404).json({ error: "File not found" });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not retrieve image" });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   try {
     if (!req.user) {
@@ -94,6 +145,14 @@ router.delete("/:id", async (req, res) => {
       return res
         .status(403)
         .json({ error: "You do not have permission to delete this spot." });
+    }
+
+    if (spot.photoFileId) {
+      try {
+        await gfs.delete(new mongoose.Types.ObjectId(spot.photoFileId));
+      } catch (err) {
+        console.error("Error deleting file:", err);
+      }
     }
 
     await Spot.findByIdAndDelete(req.params.id);

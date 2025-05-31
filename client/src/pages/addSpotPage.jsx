@@ -13,21 +13,61 @@ export default function AddSpotPage() {
   const [openTime, setOpenTime] = useState("");
   const [closeTime, setCloseTime] = useState("");
   const [is24Hours, setIs24Hours] = useState(false);
-  const [tags, setTags] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
   const [photo, setPhoto] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [formConfirmed, setFormConfirmed] = useState(false);
+  const availableTags = [
+    "quiet",
+    "coffee",
+    "outdoor",
+    "wifi",
+    "group",
+    "noisy",
+    "24/7",
+    "food",
+    "parking",
+    "library",
+    "lab",
+    "outlet",
+  ];
+
+  const toggleTag = (tag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const validateFileType = (file) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      setErrorMessage(
+        "Invalid file type. Please upload a JPEG, PNG, or GIF image."
+      );
+      return false;
+    }
+    setErrorMessage("");
+    return true;
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && validateFileType(file)) {
+      setPhoto(file);
+    } else {
+      e.target.value = null; // Reset the input
+      setPhoto(null);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowConfirmModal(true);
+  };
 
-    if (!formConfirmed) {
-      setShowConfirmModal(true);
-      return;
-    }
-
+  const submitForm = async () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("location", location);
@@ -40,22 +80,21 @@ export default function AddSpotPage() {
           : { open: openTime, close: closeTime }
       )
     );
-    formData.append(
-      "tags",
-      JSON.stringify(
-        tags
-          .split(",")
-          .map((tag) => tag.trim())
-          .filter(Boolean)
-      )
-    );
+    formData.append("tags", JSON.stringify(selectedTags));
     if (photo) formData.append("photo", photo);
 
-    await axios.post("/api/spots", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    navigate("/");
+    try {
+      await axios.post("/api/spots", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.error ||
+          "Failed to create spot. Please try again."
+      );
+      setShowConfirmModal(false);
+    }
   };
 
   if (loading) {
@@ -148,13 +187,27 @@ export default function AddSpotPage() {
               className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base resize-vertical min-h-[100px] focus:outline-none focus:ring-0 focus:border-[#75767B]"
             />
 
-            <input
-              type="text"
-              placeholder="Tags (comma-separated)"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
-            />
+            <div className="flex flex-col gap-2">
+              <label className="text-base font-medium text-[#1a3d3c]">
+                Tags
+              </label>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {availableTags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => toggleTag(tag)}
+                    className={`px-4 py-2 rounded-full text-sm transition-all ${
+                      selectedTags.includes(tag)
+                        ? "bg-[#b6244f] text-white"
+                        : "bg-[#bfd9cd] text-[#305252] hover:bg-[#a5c5b7]"
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-base font-medium text-[#1a3d3c]">
@@ -162,11 +215,14 @@ export default function AddSpotPage() {
               </label>
               <input
                 type="file"
-                accept="image/*"
-                onChange={(e) => setPhoto(e.target.files[0])}
+                accept="image/jpeg,image/png,image/gif"
+                onChange={handleFileChange}
                 required
                 className="text-base p-2 rounded-md focus:outline-none focus:ring-0 focus:border-[#75767B]"
               />
+              {errorMessage && (
+                <div className="text-red-600 text-sm mt-1">{errorMessage}</div>
+              )}
             </div>
 
             <button
@@ -176,6 +232,7 @@ export default function AddSpotPage() {
               Save Spot
             </button>
           </form>
+
           {showConfirmModal && (
             <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
               <div className="bg-[#bfd9cd] text-slate rounded-2xl p-8 max-w-md w-full font-[lexend]">
@@ -192,11 +249,7 @@ export default function AddSpotPage() {
                     Cancel
                   </button>
                   <button
-                    onClick={() => {
-                      setFormConfirmed(true);
-                      setShowConfirmModal(false);
-                      document.querySelector("form").requestSubmit();
-                    }}
+                    onClick={submitForm}
                     className="bg-[#305252] hover:bg-[#1f3938] text-white px-4 py-2 rounded-md transition focus:outline-none"
                   >
                     Yes, Create

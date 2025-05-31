@@ -9,7 +9,7 @@ const spotSchema = new mongoose.Schema({
     open: String,
     close: String,
   },
-  imageUrl: String,
+  photoFileId: mongoose.Schema.Types.ObjectId,
   rating: { type: Number, default: 0 },
   reviews: { type: Number, default: 0 },
   userId: {

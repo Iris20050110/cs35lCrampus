@@ -43,9 +43,9 @@ export default function MoreInformationPage() {
         <strong>Tags:</strong> {spot.tags?.join(", ")}
       </p>
 
-      {spot.imageUrl && (
+      {spot.photoFileId && (
         <img
-          src={spot.imageUrl}
+          src={`/api/spots/image/${spot.photoFileId}`}
           alt={spot.name}
           className="mt-6 rounded shadow-md max-w-full"
         />
