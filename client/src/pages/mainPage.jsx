@@ -47,7 +47,7 @@ export default function MainPage() {
           {spots?.map((spot) => (
             <div
               key={spot._id}
-              className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg justify-center transition-transform duration-300 hover:scale-103 hover:shadow-2xl"
+              className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg justify-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
             >
               <Link to={`/spots/${spot._id}`}>
                 <SpotCard spot={spot} currentUser={currentUser} />
