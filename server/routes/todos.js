@@ -2,10 +2,6 @@ import express from "express";
 import multer from "multer";
 import Todo from "../models/Todo.js";
 
-function parseLocalDate(str) {
-    return new Date(str + "T00:00:00");
-  }
-
 const router  = express.Router();
 
 router.get('/', async (req, res) => {
@@ -18,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST a new todo, stamping it with googleId
+//post
 router.post('/', async (req, res) => {
   if (!req.user || !req.user.googleId) {
     return res.status(401).json({ error: 'Not authenticated' });
@@ -28,7 +24,7 @@ router.post('/', async (req, res) => {
     const todo = await Todo.create({
       text:    req.body.text,
       dueDate: req.body.dueDate,
-      user:    req.user.googleId    // ← use googleId here
+      user:    req.user.googleId
     });
     res.status(201).json(todo);
   } catch (err) {
@@ -36,7 +32,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT update one of your todos
+//put
 router.put('/:id', async (req, res) => {
   try {
     const updated = await Todo.findOneAndUpdate(
@@ -51,7 +47,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE one of your todos
+//delete
 router.delete('/:id', async (req, res) => {
   try {
     const deleted = await Todo.findOneAndDelete({
