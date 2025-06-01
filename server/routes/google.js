@@ -29,6 +29,18 @@ router.get("/check", (req, res) => {
   }
 });
 
+
+///////////JUST TO TEST WHILE LOGGEN IN (To view profile page)///////////
+//router.get('/check', (req, res) => {
+//  return res.json({
+//    isAuthenticated: true,
+//    user: {
+//      name: 'Mabel Neyyan',
+//      email: 'mabelneyyan@g.ucla.edu'
+//    }
+//  });
+//});
+
 router.get("/logout", async (req, res) => {
   console.log("Attempting logout...");
   console.log("req.user:", req.user); // 🔍 See if user is set
