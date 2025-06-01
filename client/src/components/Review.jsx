@@ -1,7 +1,6 @@
 // src/components/Review.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Star } from "lucide-react";
 
 export default function Review({ spotId }) {
   const [reviews, setReviews] = useState([]);
@@ -43,7 +42,7 @@ export default function Review({ spotId }) {
                 <span className="ml-2">{review.rating} / 5</span>
               </div>
               {review.text && (
-                <p className="mt-1 text-slate">{review.text}</p>
+                <p className="mt-1 text-slate break-words">{review.text}</p>
               )}
             </li>
           ))}

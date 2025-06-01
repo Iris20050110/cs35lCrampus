@@ -49,7 +49,7 @@ export default function MainPage() {
               key={spot._id}
               className="m-[12px] p-[18px] rounded-[18px] bg-ash shadow-lg justify-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
             >
-              <Link to={`/spots/${spot._id}`}>
+              <Link key={spot._id} to={`/spots/${spot._id}`} state={{ spot }}>
                 <SpotCard spot={spot} currentUser={currentUser} />
               </Link>
             </div>

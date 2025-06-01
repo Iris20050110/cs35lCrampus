@@ -180,7 +180,7 @@ router.get("/:id/reviews", async (req, res) => {
 router.post("/:id/reviews", async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(401).json({ error: "Not authenticated" })
+      return res.status(401).json({ error: "You must be signed in with a UCLA email to submit a review." })
     }
 
     const { rating, text } = req.body

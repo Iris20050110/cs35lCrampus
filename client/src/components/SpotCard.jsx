@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { Trash2, Star } from "lucide-react";
+import AverageRating from "./AverageRating";
 
 export default function SpotCard({ spot, currentUser }) {
   const {
@@ -152,9 +153,8 @@ export default function SpotCard({ spot, currentUser }) {
       </div>
 
       <div className="flex items-center justify-center gap-1 text-[14px] mt-[5px] pt-[5px] ml-[5px]">
-        <Star size={16} className="text-yellow-500 fill-yellow-500" />
         <span className="text-[#333]">
-          {rating.toFixed(1)} ({reviewCount})
+            <AverageRating reviews={reviewsArr} size={20} />
         </span>
       </div>
 
