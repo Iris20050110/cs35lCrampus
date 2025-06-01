@@ -10,27 +10,28 @@ export default function SpotCard({ spot, currentUser }) {
     hours = {},
     tags = [],
     rating = 0,
-    reviews = 0,
+    reviews: reviewsArr = [], 
     location = "",
     userId,
     _id,
   } = spot;
 
-  const [showModal, setShowModal] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
-  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false)
+  const [imageLoading, setImageLoading] = useState(true)
+  const [imageError, setImageError] = useState(false)
+  const navigate = useNavigate()
+  const reviewCount = Array.isArray(reviewsArr) ? reviewsArr.length : reviewsArr
 
   const isCurrentlyOpen = () => {
-    if (!hours?.open || !hours?.close) return false;
+    if (!hours?.open || !hours?.close) return false
     try {
-      const now = new Date();
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
+      const now = new Date()
+      const currentHour = now.getHours()
+      const currentMinute = now.getMinutes()
 
       const parseTime = (timeStr) => {
         const match = timeStr.match(/(\d+)(?::(\d+))?\s*(am|pm)/i);
-        if (!match) return null;
+        if (!match) return null
 
         let [_, h, m, period] = match;
         h = parseInt(h, 10);
@@ -153,7 +154,7 @@ export default function SpotCard({ spot, currentUser }) {
       <div className="flex items-center justify-center gap-1 text-[14px] mt-[5px] pt-[5px] ml-[5px]">
         <Star size={16} className="text-yellow-500 fill-yellow-500" />
         <span className="text-[#333]">
-          {rating.toFixed(1)} ({reviews})
+          {rating.toFixed(1)} ({reviewCount})
         </span>
       </div>
 

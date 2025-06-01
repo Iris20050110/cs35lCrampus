@@ -1,6 +1,7 @@
 // src/components/Review.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Star } from "lucide-react";
 
 export default function Review({ spotId }) {
   const [reviews, setReviews] = useState([]);
