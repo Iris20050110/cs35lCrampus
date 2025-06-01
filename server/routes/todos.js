@@ -2,64 +2,62 @@ import express from "express";
 import multer from "multer";
 import Todo from "../models/Todo.js";
 
-function parseLocalDate(str) {
-    return new Date(str + "T00:00:00");
-  }
-
 const router  = express.Router();
 
-//get
 router.get('/', async (req, res) => {
   try {
-    const list = await Todo.find().sort({ createdAt: -1 });
-    res.json(list);
-  } catch {
-    res.status(500).json({ error: 'Server error' });
+    const todos = await Todo.find({ user: req.user.googleId })
+                            .sort('-createdAt');
+    res.json(todos);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
 //post
-router.post("/", async (req, res) => {
-  console.log("POST /api/todos body:", req.body);
+router.post('/', async (req, res) => {
+  if (!req.user || !req.user.googleId) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+
   try {
-    const { text, dueDate } = req.body;                     // ← pull fields out
-    const newTodo = await Todo.create({
-      text,
-      dueDate: parseLocalDate(dueDate)                     // ← use our helper
+    const todo = await Todo.create({
+      text:    req.body.text,
+      dueDate: req.body.dueDate,
+      user:    req.user.googleId
     });
-    res.status(201).json(newTodo);
+    res.status(201).json(todo);
   } catch (err) {
-    console.error("POST /api/todos error:", err);
     res.status(400).json({ error: err.message });
   }
 });
 
-
 //put
 router.put('/:id', async (req, res) => {
   try {
-    const { completed, dueDate } = req.body;
-    const localDue = parseLocalDate(dueDate);
-    const updated = await Todo.findByIdAndUpdate(
-      req.params.id,
-      { completed, dueDate: localDue },
+    const updated = await Todo.findOneAndUpdate(
+      { _id: req.params.id, user: req.user.googleId },
+      { completed: req.body.completed, dueDate: req.body.dueDate },
       { new: true }
     );
-    if (!updated) return res.sendStatus(404);
+    if (!updated) return res.status(404).json({ error: 'Not found' });
     res.json(updated);
-  } catch {
-    res.status(400).json({ error: 'Invalid ID or data' });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
 //delete
 router.delete('/:id', async (req, res) => {
   try {
-    const deleted = await Todo.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.sendStatus(404);
+    const deleted = await Todo.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user.googleId
+    });
+    if (!deleted) return res.status(404).json({ error: 'Not found' });
     res.sendStatus(204);
-  } catch {
-    res.status(400).json({ error: 'Invalid ID' });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
