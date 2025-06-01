@@ -6,43 +6,43 @@ import NewReview from "../components/NewReview";
 import AverageRating from "../components/AverageRating";
 
 export default function MoreInformationPage() {
-  const location = useLocation();
-  const passedSpot = location.state?.spot ?? null;
-  const { id: paramsId } = useParams();
-  const spotId = passedSpot?._id || paramsId;
+  const location = useLocation()
+  const passedSpot = location.state?.spot ?? null
+  const { id: paramsId } = useParams()
+  const spotId = passedSpot?._id || paramsId
 
-  const [spot, setSpot] = useState(passedSpot);
-  const [loading, setLoading] = useState(passedSpot ? false : true);
-  const [error, setError] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(0);
+  const [spot, setSpot] = useState(passedSpot)
+  const [loading, setLoading] = useState(passedSpot ? false : true)
+  const [error, setError] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(0)
 
   const handleReviewAdded = useCallback(() => {
-    setRefreshToken((prev) => prev + 1);
-  }, []);
+    setRefreshToken((prev) => prev + 1)
+  }, [])
 
   useEffect(() => {
     if (passedSpot) return;
 
     async function fetchSpot() {
       try {
-        setLoading(true);
-        const res = await axios.get(`/api/spots/${spotId}`);
-        setSpot(res.data);
-        setError(null);
+        setLoading(true)
+        const res = await axios.get(`/api/spots/${spotId}`)
+        setSpot(res.data)
+        setError(null)
       } catch {
-        setError("Failed to load spot information.");
+        setError("Failed to load spot information.")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
 
     if (spotId) {
-      fetchSpot();
+      fetchSpot()
     } else {
-      setError("No spot ID provided");
-      setLoading(false);
+      setError("No spot ID provided")
+      setLoading(false)
     }
-  }, [spotId, passedSpot]);
+  }, [spotId, passedSpot])
 
   if (loading) {
     return (
