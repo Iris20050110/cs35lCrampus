@@ -5,7 +5,7 @@ export default function LoginRequired({
   message = "You must be signed in with a UCLA email to view this page.",
 }) {
   return (
-    <div className="w-screen h-screen bg-[#fef6ee] flex flex-col overflow-hidden font-[lexend]">
+    <div className="w-screen h-screen bg-tan flex flex-col overflow-hidden font-[lexend]">
       <div className="pt-6">
         <NavBar />
       </div>

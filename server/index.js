@@ -53,7 +53,7 @@ function ensureAuth(req, res, next) {
   if (req.isAuthenticated && req.isAuthenticated()) {
     return next();
   }
-  res.status(401).json({ error: 'Not authenticated' });
+  res.status(401).json({ error: "Not authenticated" });
 }
 
 // Passport Google Strategy
@@ -83,14 +83,12 @@ passport.use(
         }
         console.log("Google profile info:", profile);
 
-
         return done(null, user);
       } catch (err) {
         return done(err, null);
       }
     }
   )
-  
 );
 
 passport.serializeUser((user, done) => {
@@ -108,9 +106,9 @@ passport.deserializeUser(async (id, done) => {
 
 // MongoDB connection
 console.log("Connecting to:", process.env.MONGO_URI);
-mongoose.set('strictQuery', false);
+mongoose.set("strictQuery", false);
 mongoose
-  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017/crampus', {
+  .connect(process.env.MONGO_URI || "mongodb://localhost:27017/crampus", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
@@ -123,23 +121,23 @@ mongoose
   });
 
 // Handle MongoDB connection errors after initial connection
-mongoose.connection.on('error', err => {
-  console.error('MongoDB connection error:', err);
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
 });
 
-mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB disconnected. Attempting to reconnect...');
+mongoose.connection.on("disconnected", () => {
+  console.log("MongoDB disconnected. Attempting to reconnect...");
 });
 
-mongoose.connection.on('reconnected', () => {
-  console.log('MongoDB reconnected successfully');
+mongoose.connection.on("reconnected", () => {
+  console.log("MongoDB reconnected successfully");
 });
 
 // routes
 app.use("/api/auth", googleAuthRouter);
 app.use("/api/spots", spotsRouter);
-app.use('/api/todos', todosRouter);
-app.use('/api/tasks', ensureAuth, todosRouter);
+app.use("/api/todos", todosRouter);
+app.use("/api/tasks", ensureAuth, todosRouter);
 
 app.get("/", (_req, res) => res.send("API is running!"));
 

@@ -1,27 +1,27 @@
 import { useState } from "react";
 import axios from "axios";
 
-axios.defaults.baseURL = 'http://localhost:5000';
-axios.defaults.withCredentials = true
+axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.withCredentials = true;
 
-export default function CreateTodo({dropdown}) {
-  const [text, setText] = useState("")
-  const [dueDate, setDueDate] = useState("")
-  const [error, setError]     = useState("")
+export default function CreateTodo({ dropdown }) {
+  const [text, setText] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!text.trim()) return
+    e.preventDefault();
+    if (!text.trim()) return;
 
     try {
-      await axios.post("/api/todos", { text, dueDate })
-      setText("")
-      setDueDate(new Date().toISOString().slice(0, 10))
-      dropdown()
-      window.location.reload()
+      await axios.post("/api/todos", { text, dueDate });
+      setText("");
+      setDueDate(new Date().toISOString().slice(0, 10));
+      dropdown();
+      window.location.reload();
     } catch (err) {
-      console.error("Create todo error:", err.response || err)
-      setError(err.response?.data?.error || "Failed to create todo")
+      console.error("Create todo error:", err.response || err);
+      setError(err.response?.data?.error || "Failed to create todo");
     }
   };
 

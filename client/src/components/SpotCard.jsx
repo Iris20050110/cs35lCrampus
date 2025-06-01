@@ -1,12 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { Trash2, Star } from "lucide-react"; // ⬅️ Clean trash icon
+import { Trash2, Star } from "lucide-react";
 
 export default function SpotCard({ spot, currentUser }) {
   const {
     name,
-    imageUrl,
+    photoFileId,
     hours = {},
     tags = [],
     rating = 0,
@@ -17,6 +17,8 @@ export default function SpotCard({ spot, currentUser }) {
   } = spot;
 
   const [showModal, setShowModal] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
   const navigate = useNavigate();
 
   const isCurrentlyOpen = () => {
@@ -68,18 +70,28 @@ export default function SpotCard({ spot, currentUser }) {
   return (
     <div className="w-full font-[lexend] relative">
       <div className="relative">
-        <Link to={`/spots/${_id}`} className="block">
-          <img
-            src={
-              imageUrl?.startsWith("http")
-                ? imageUrl
-                : `${
-                    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
-                  }${imageUrl}`
-            }
-            alt={name}
-            className="h-[275px] w-full object-cover rounded-[13px]"
-          />
+        {imageLoading && photoFileId && (
+          <div className="absolute inset-0 bg-[#bfd9cd] animate-pulse rounded-[13px] flex items-center justify-center">
+            <span className="text-[#305252]">Loading...</span>
+          </div>
+        )}
+        <img
+          src={photoFileId ? `/api/spots/image/${photoFileId}` : ""}
+          alt={name}
+          className="h-[275px] w-full object-cover rounded-[13px]"
+          onLoad={() => setImageLoading(false)}
+          onError={() => {
+            setImageLoading(false);
+            setImageError(true);
+          }}
+          style={{ display: imageError ? "none" : "block" }}
+        />
+        {imageError && (
+          <div className="h-[275px] w-full bg-[#bfd9cd] rounded-[13px] flex items-center justify-center">
+            <span className="text-[#305252]">Failed to load image</span>
+          </div>
+        )}
+        <Link to={`/spots/${_id}`}>
           <h3 className="ml-[6px] text-[24px] font-extrabold text-[#1a3d3c] drop-shadow-sm tracking-wide mb-[4px] mt-[4px]">
             {name}
           </h3>

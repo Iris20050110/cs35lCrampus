@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import Review from "../components/Review";
+import NewReview from "../components/NewReview";
 
 export default function MoreInformationPage() {
   const { id } = useParams();
   const [spot, setSpot] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(0)
+
+  const handleReviewAdded = () => {
+        setRefreshToken((prev) => prev + 1);
+      };
 
   useEffect(() => {
     async function fetchSpot() {
@@ -43,13 +50,16 @@ export default function MoreInformationPage() {
         <strong>Tags:</strong> {spot.tags?.join(", ")}
       </p>
 
-      {spot.imageUrl && (
+      {spot.photoFileId && (
         <img
-          src={spot.imageUrl}
+          src={`/api/spots/image/${spot.photoFileId}`}
           alt={spot.name}
           className="mt-6 rounded shadow-md max-w-full"
         />
       )}
+
+      <Review key={refreshToken} spotId={id}/>
+      <NewReview spotId={id} onReviewAdded={handleReviewAdded}/>
     </div>
   );
 }
