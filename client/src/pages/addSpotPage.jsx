@@ -226,32 +226,6 @@ export default function AddSpotPage() {
               Save Spot
             </button>
           </form>
-
-          {showConfirmModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-              <div className="bg-[#bfd9cd] text-slate rounded-2xl p-8 max-w-md w-full font-[lexend]">
-                <h2 className="text-xl font-bold mb-4">Heads up!</h2>
-                <p className="text-base mb-6">
-                  You can only delete this spot during your current session. Do
-                  you still want to create it?
-                </p>
-                <div className="flex justify-end gap-4">
-                  <button
-                    onClick={() => setShowConfirmModal(false)}
-                    className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-md transition focus:outline-none"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={submitForm}
-                    className="bg-[#305252] hover:bg-[#1f3938] text-white px-4 py-2 rounded-md transition focus:outline-none"
-                  >
-                    Yes, Create
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
