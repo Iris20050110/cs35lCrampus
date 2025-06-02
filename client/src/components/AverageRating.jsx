@@ -1,39 +1,30 @@
-import React from 'react'
+import React from "react";
 import { Star, StarHalf } from "lucide-react";
 
-const AverageRating = ({reviews = [], size = 32}) => {
+const AverageRating = ({ reviews = [], size = 32 }) => {
   if (!Array.isArray(reviews) || reviews.length === 0) {
     return (
       <div className="flex items-center space-x-1">
-        {[1, 2, 3, 4, 5].map((starIdx) => (
-          <Star
-            key={starIdx}
-            size={32}
-            fill="none"
-            stroke="currentColor"
-            className="text-gray-300"
-          />
-        ))}
+        <span className="text-sm text-gray-500 italic">No ratings yet</span>
       </div>
-    )
+    );
   }
 
-    function calculateAverage(reviews) {
-        if (!Array.isArray(reviews) || reviews.length === 0) {
-          return 0
-        }
-        // calculate sum of all ratings
-        const total = reviews.reduce((sum, review) => {
-          const r = typeof review.rating === "number" ? review.rating : 0
-          return sum + r
-        }, 0)
-      
-        return total / reviews.length
-      }
+  function calculateAverage(reviews) {
+    if (!Array.isArray(reviews) || reviews.length === 0) {
+      return 0;
+    }
+    // calculate sum of all ratings
+    const total = reviews.reduce((sum, review) => {
+      const r = typeof review.rating === "number" ? review.rating : 0;
+      return sum + r;
+    }, 0);
 
-    const avgRaw = calculateAverage(reviews)
-    const avgHalf = Math.round(avgRaw * 2) / 2
+    return total / reviews.length;
+  }
 
+  const avgRaw = calculateAverage(reviews);
+  const avgHalf = Math.round(avgRaw * 2) / 2;
 
   return (
     <div className="flex items-center">
@@ -70,11 +61,9 @@ const AverageRating = ({reviews = [], size = 32}) => {
           );
         }
       })}
-      <span className="ml-2">
-        {avgRaw.toFixed(1)} / 5
-      </span>
+      <span className="ml-2">{avgRaw.toFixed(1)} / 5</span>
     </div>
-  )
-}
+  );
+};
 
-export default AverageRating
+export default AverageRating;

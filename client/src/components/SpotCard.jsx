@@ -10,7 +10,6 @@ export default function SpotCard({ spot, currentUser }) {
     photoFileId,
     hours = {},
     tags = [],
-    rating = 0,
     reviews: reviewsArr = [], 
     location = "",
     userId,
@@ -21,7 +20,6 @@ export default function SpotCard({ spot, currentUser }) {
   const [imageLoading, setImageLoading] = useState(true)
   const [imageError, setImageError] = useState(false)
   const navigate = useNavigate()
-  const reviewCount = Array.isArray(reviewsArr) ? reviewsArr.length : reviewsArr
 
   const isCurrentlyOpen = () => {
     if (!hours?.open || !hours?.close) return false

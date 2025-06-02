@@ -7,19 +7,17 @@ import LoginRequired from "../components/LoginRequired";
 
 export default function AddSpotPage() {
   const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false });
-  const [name, setName] = useState("")
-  const [location, setLocation] = useState("")
-  const [description, setDescription] = useState("")
-  const [openTime, setOpenTime] = useState("")
-  const [closeTime, setCloseTime] = useState("")
-  const [is24Hours, setIs24Hours] = useState(false)
-  const [rating, setRating] = useState("")
-  const [reviews, setReviews] = useState("")
-  const [selectedTags, setSelectedTags] = useState([])
-  const [photo, setPhoto] = useState(null)
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
-  const navigate = useNavigate()
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [openTime, setOpenTime] = useState("");
+  const [closeTime, setCloseTime] = useState("");
+  const [is24Hours, setIs24Hours] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [photo, setPhoto] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const availableTags = [
     "quiet",

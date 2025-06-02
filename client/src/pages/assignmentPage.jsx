@@ -6,8 +6,8 @@ import useAuth from "../hooks/useAuth";
 import LoginRequired from "../components/LoginRequired";
 
 const AssignmentPage = () => {
-  const [showDropdown, setShowDropdown] = useState(false)
-  const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false })
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { isAuthenticated } = useAuth({ redirectIfUnauth: false });
 
   const toggleDropdown = () => {
     setShowDropdown((open) => !open);

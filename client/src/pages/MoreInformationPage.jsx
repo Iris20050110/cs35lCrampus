@@ -6,43 +6,59 @@ import NewReview from "../components/NewReview";
 import AverageRating from "../components/AverageRating";
 
 export default function MoreInformationPage() {
-  const location = useLocation()
-  const passedSpot = location.state?.spot ?? null
-  const { id: paramsId } = useParams()
-  const spotId = passedSpot?._id || paramsId
+  const location = useLocation();
+  const passedSpot = location.state?.spot ?? null;
+  const { id: paramsId } = useParams();
+  const spotId = passedSpot?._id || paramsId;
 
-  const [spot, setSpot] = useState(passedSpot)
-  const [loading, setLoading] = useState(passedSpot ? false : true)
-  const [error, setError] = useState(null)
-  const [refreshToken, setRefreshToken] = useState(0)
+  const [spot, setSpot] = useState(passedSpot);
+  const [loading, setLoading] = useState(passedSpot ? false : true);
+  const [error, setError] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(0);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const handleReviewAdded = useCallback(() => {
-    setRefreshToken((prev) => prev + 1)
-  }, [])
+    setRefreshToken((prev) => prev + 1);
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/check", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setCurrentUser(data.user);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      }
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     if (passedSpot) return;
 
     async function fetchSpot() {
       try {
-        setLoading(true)
-        const res = await axios.get(`/api/spots/${spotId}`)
-        setSpot(res.data)
-        setError(null)
+        setLoading(true);
+        const res = await axios.get(`/api/spots/${spotId}`);
+        setSpot(res.data);
+        setError(null);
       } catch {
-        setError("Failed to load spot information.")
+        setError("Failed to load spot information.");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
     if (spotId) {
-      fetchSpot()
+      fetchSpot();
     } else {
-      setError("No spot ID provided")
-      setLoading(false)
+      setError("No spot ID provided");
+      setLoading(false);
     }
-  }, [spotId, passedSpot])
+  }, [spotId, passedSpot]);
 
   if (loading) {
     return (
@@ -80,12 +96,10 @@ export default function MoreInformationPage() {
 
   return (
     <div className="w-screen p-8 bg-tan font-[lexend] text-oynx">
-        <Link
-          to="/"
-          className="px-4 py-2 bg-slate text-white rounded mb-10">
-          &lt; Back
-        </Link>
-        <h1 className="text-4xl font-bold mt-10 mb-5">{name}</h1>
+      <Link to="/" className="px-4 py-2 bg-slate text-white rounded mb-10">
+        &lt; Back
+      </Link>
+      <h1 className="text-4xl font-bold mt-10 mb-5">{name}</h1>
 
       <div className="flex flex-row items-start gap-8 w-full">
         <div className="flex-1 min-w-0">
@@ -104,7 +118,7 @@ export default function MoreInformationPage() {
               <span className="font-medium">Location:</span> {address}
             </div>
             <div>
-            <span className="font-medium">Tags:</span>{" "}
+              <span className="font-medium">Tags:</span>{" "}
               {tags.length === 0 ? (
                 <span className="text-gray-600 italic">No tags</span>
               ) : (
@@ -140,13 +154,17 @@ export default function MoreInformationPage() {
       </div>
 
       <div className="mt-8">
-      {(reviewsArr.length === 0 || reviewsArr === 0) ? (
-        <p className="text-lg italic text-gray-600 mb-6">No reviews yet.</p>
-      ) : (
-        <div className="mb-6">
-          <Review key={refreshToken} spotId={spotId} />
-        </div>
-      )}
+        {reviewsArr.length === 0 || reviewsArr === 0 ? (
+          <p className="text-lg italic text-gray-600 mb-6">No reviews yet.</p>
+        ) : (
+          <div className="mb-6">
+            <Review
+              key={refreshToken}
+              spotId={spotId}
+              currentUser={currentUser}
+            />
+          </div>
+        )}
         <NewReview spotId={spotId} onReviewAdded={handleReviewAdded} />
       </div>
     </div>
