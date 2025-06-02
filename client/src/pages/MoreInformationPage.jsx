@@ -17,9 +17,17 @@ export default function MoreInformationPage() {
   const [refreshToken, setRefreshToken] = useState(0);
   const [currentUser, setCurrentUser] = useState(null);
 
-  const handleReviewAdded = useCallback(() => {
-    setRefreshToken((prev) => prev + 1);
-  }, []);
+  const handleReviewAdded = useCallback(async () => {
+    try {
+      const res = await axios.get(`/api/spots/${spotId}`, {
+        withCredentials: true,
+      });
+      setSpot(res.data);
+      setRefreshToken((prev) => prev + 1);
+    } catch (err) {
+      console.error("Failed to refresh spot data:", err);
+    }
+  }, [spotId]);
 
   useEffect(() => {
     const fetchUser = async () => {

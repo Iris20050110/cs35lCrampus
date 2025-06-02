@@ -148,7 +148,7 @@ router.get("/:id/reviews", async (req, res) => {
   try {
     const spot = await Spot.findById(req.params.id).populate(
       "reviews.userId",
-      "_id username"
+      "_id name"
     );
     if (!spot) return res.status(404).json({ error: "Spot not found" });
     res.json(spot.reviews);
@@ -175,7 +175,15 @@ router.post("/:id/reviews", async (req, res) => {
     const newReview = { userId: req.user._id, rating, text, date: new Date() };
     spot.reviews.push(newReview);
     await spot.save();
-    res.status(201).json({ message: "Review added", review: newReview });
+
+    // Fetch the updated spot with populated user data
+    const updatedSpot = await Spot.findById(req.params.id).populate(
+      "reviews.userId",
+      "_id name"
+    );
+    const addedReview = updatedSpot.reviews[updatedSpot.reviews.length - 1];
+
+    res.status(201).json({ message: "Review added", review: addedReview });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to add review" });
@@ -247,7 +255,14 @@ router.patch("/:id/reviews/:reviewId", async (req, res) => {
     review.text = text;
     await spot.save();
 
-    res.json({ success: true, review });
+    // Fetch the updated spot with populated user data
+    const updatedSpot = await Spot.findById(req.params.id).populate(
+      "reviews.userId",
+      "_id name"
+    );
+    const updatedReview = updatedSpot.reviews.id(req.params.reviewId);
+
+    res.json({ success: true, review: updatedReview });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update review" });

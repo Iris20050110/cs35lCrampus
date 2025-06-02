@@ -195,6 +195,9 @@ export default function Review({ spotId, currentUser }) {
                   {r.text && (
                     <p className="mt-3 text-slate break-words">{r.text}</p>
                   )}
+                  <p className="mt-2 text-sm text-gray-500">
+                    by {r.userId?.name || "unknown"}
+                  </p>
                 </>
               )}
             </li>

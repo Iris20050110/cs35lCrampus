@@ -3,6 +3,7 @@ import axios from "axios";
 import NavBar from "../components/navbar";
 import useAuth from "../hooks/useAuth";
 import LoginRequired from "../components/LoginRequired";
+import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const { isAuthenticated, loading: authLoading } = useAuth({
@@ -248,6 +249,24 @@ const ProfilePage = () => {
             Edit Profile
           </button>
         )}
+        <Link
+          to="/todos"
+          style={{
+            backgroundColor: accentColor,
+            color: textColor,
+            border: "none",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "8px",
+            cursor: "pointer",
+            display: "block",
+            margin: "2rem auto 0",
+            textDecoration: "none",
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
+          View Your Schedule
+        </Link>
       </div>
     </div>
   );
