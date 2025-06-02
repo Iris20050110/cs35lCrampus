@@ -15,7 +15,6 @@ export default function AddSpotPage() {
   const [is24Hours, setIs24Hours] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [photo, setPhoto] = useState(null);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -64,10 +63,6 @@ export default function AddSpotPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowConfirmModal(true);
-  };
-
-  const submitForm = async () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("location", location);
@@ -93,7 +88,6 @@ export default function AddSpotPage() {
         error.response?.data?.error ||
           "Failed to create spot. Please try again."
       );
-      setShowConfirmModal(false);
     }
   };
 
@@ -115,7 +109,7 @@ export default function AddSpotPage() {
     <div className="pt-5 h-screen w-screen bg-tan flex flex-col overflow-auto font-[lexend]">
       <NavBar />
       <div className="flex-1 flex justify-center items-start px-4 py-8">
-        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-8">
+        <div className="w-full max-w-4xl bg-ash rounded-2xl shadow-lg p-8">
           <h1 className="text-center text-[28px] font-extrabold text-slate mb-6">
             Add a Study Spot
           </h1>
@@ -127,7 +121,7 @@ export default function AddSpotPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="Name"
               required
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
+              className="bg-white placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0"
             />
 
             <input
@@ -136,7 +130,7 @@ export default function AddSpotPage() {
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Location"
               required
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
+              className="bg-white placeholder:text-gray-600 px-4 py-3 rounded-md text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
             />
 
             <div className="flex items-center gap-3">
@@ -162,7 +156,7 @@ export default function AddSpotPage() {
                 required={!is24Hours}
                 pattern="^(0?[1-9]|1[0-2]):[0-5][0-9](am|pm)$"
                 title="Enter time in format hh:mmam or hh:mmpm (e.g. 9:00am)"
-                className="w-1/2 bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
+                className="w-1/2 bg-white placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
               />
 
               <input
@@ -174,7 +168,7 @@ export default function AddSpotPage() {
                 required={!is24Hours}
                 pattern="^(0?[1-9]|1[0-2]):[0-5][0-9](am|pm)$"
                 title="Enter time in format hh:mmam or hh:mmpm (e.g. 5:00pm)"
-                className="w-1/2 bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
+                className="w-1/2 bg-white placeholder:text-gray-600 px-4 py-3 rounded-md disabled:opacity-60 text-base focus:outline-none focus:ring-0 focus:border-[#75767B]"
               />
             </div>
 
@@ -184,7 +178,7 @@ export default function AddSpotPage() {
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               required
-              className="bg-[#bfd9cd] placeholder:text-gray-600 px-4 py-3 rounded-md text-base resize-vertical min-h-[100px] focus:outline-none focus:ring-0 focus:border-[#75767B]"
+              className="bg-white placeholder:text-gray-600 px-4 py-3 rounded-md text-base resize-vertical min-h-[100px] focus:outline-none focus:ring-0 focus:border-[#75767B]"
             />
 
             <div className="flex flex-col gap-2">
@@ -200,7 +194,7 @@ export default function AddSpotPage() {
                     className={`px-4 py-2 rounded-full text-sm transition-all ${
                       selectedTags.includes(tag)
                         ? "bg-[#b6244f] text-white"
-                        : "bg-[#bfd9cd] text-[#305252] hover:bg-[#a5c5b7]"
+                        : "bg-slate text-white hover:bg-[#a5c5b7]"
                     }`}
                   >
                     {tag}

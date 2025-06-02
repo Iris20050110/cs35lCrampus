@@ -23,24 +23,31 @@ router.get(
 // Check if user is authenticated
 router.get("/check", (req, res) => {
   if (req.isAuthenticated()) {
-    res.json({ isAuthenticated: true, user: req.user });
+    const { _id, name, email, picture } = req.user;
+    res.json({
+      isAuthenticated: true,
+      user: { _id, name, email, picture },
+    });
   } else {
     res.json({ isAuthenticated: false });
   }
 });
 
+///////////JUST TO TEST WHILE LOGGEN IN (To view profile page)///////////
+//router.get('/check', (req, res) => {
+//  return res.json({
+//    isAuthenticated: true,
+//    user: {
+//      name: 'Mabel Neyyan',
+//      email: 'mabelneyyan@g.ucla.edu'
+//    }
+//  });
+//});
+
 router.get("/logout", async (req, res) => {
   console.log("Attempting logout...");
-  console.log("req.user:", req.user); // 🔍 See if user is set
 
   try {
-    if (req.user) {
-      console.log("Deleting user from DB with id:", req.user._id);
-      await User.findByIdAndDelete(req.user._id);
-    } else {
-      console.log("No user found in session. Nothing to delete.");
-    }
-
     req.logout((err) => {
       if (err) {
         console.error("Logout error:", err);
@@ -50,8 +57,8 @@ router.get("/logout", async (req, res) => {
       res.json({ success: true });
     });
   } catch (err) {
-    console.error("Logout DB error:", err);
-    res.status(500).json({ error: "Error removing user" });
+    console.error("Logout error:", err);
+    res.status(500).json({ error: "Error logging out" });
   }
 });
 

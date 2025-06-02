@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { Trash2, Star } from "lucide-react";
+import AverageRating from "./AverageRating";
 
 export default function SpotCard({ spot, currentUser }) {
   const {
@@ -9,8 +10,7 @@ export default function SpotCard({ spot, currentUser }) {
     photoFileId,
     hours = {},
     tags = [],
-    rating = 0,
-    reviews = 0,
+    reviews: reviewsArr = [],
     location = "",
     userId,
     _id,
@@ -97,8 +97,7 @@ export default function SpotCard({ spot, currentUser }) {
           </h3>
         </Link>
 
-        {}
-        {currentUser && currentUser._id === userId && (
+        {currentUser && currentUser._id === (userId?._id || userId) && (
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -151,11 +150,14 @@ export default function SpotCard({ spot, currentUser }) {
       </div>
 
       <div className="flex items-center justify-center gap-1 text-[14px] mt-[5px] pt-[5px] ml-[5px]">
-        <Star size={16} className="text-yellow-500 fill-yellow-500" />
         <span className="text-[#333]">
-          {rating.toFixed(1)} ({reviews})
+          <AverageRating reviews={reviewsArr} size={20} />
         </span>
       </div>
+
+      <p className="ml-[6px] text-[12px] text-[#666666] mt-2">
+        uploaded by {userId?.name || "unknown"}
+      </p>
 
       {/* Modal */}
       {showModal && (

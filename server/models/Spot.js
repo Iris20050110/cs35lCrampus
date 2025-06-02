@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 
+const reviewSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  text: { type: String },
+  rating: { type: Number, required: true },
+  date: { type: Date, default: Date.now },
+});
+
 const spotSchema = new mongoose.Schema({
   name: { type: String, required: true },
   location: String,
@@ -10,8 +17,10 @@ const spotSchema = new mongoose.Schema({
     close: String,
   },
   photoFileId: mongoose.Schema.Types.ObjectId,
-  rating: { type: Number, default: 0 },
-  reviews: { type: Number, default: 0 },
+  reviews: {
+    type: [reviewSchema],
+    default: [],
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

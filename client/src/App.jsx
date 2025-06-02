@@ -20,7 +20,8 @@ const router = createBrowserRouter([
       { index: true, element: <MainPage /> }, // renders at "/"
       { path: "add", element: <AddSpotPage /> }, // renders at "/add"
       { path: "login", element: <LoginPage /> },
-      { path: "profile", element: <ProfilePage /> },
+      { path: "profile", element: <ProfilePage /> }, // not logged in
+      { path: "profile/:id", element: <ProfilePage /> }, // logged in
       { path: "todos", element: <AssignmentPage /> },
       { path: "spots/:id", element: <MoreInformationPage /> },
     ],
