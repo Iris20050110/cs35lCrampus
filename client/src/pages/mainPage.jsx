@@ -13,7 +13,8 @@ export default function MainPage() {
     const { data } = await axios.get(
       `/api/spots?search=${encodeURIComponent(q)}&tag=${encodeURIComponent(
         tag
-      )}`
+      )}`,
+      { withCredentials: true }
     );
     setSpots(data);
   };

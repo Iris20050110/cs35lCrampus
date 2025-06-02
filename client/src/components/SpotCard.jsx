@@ -10,27 +10,27 @@ export default function SpotCard({ spot, currentUser }) {
     photoFileId,
     hours = {},
     tags = [],
-    reviews: reviewsArr = [], 
+    reviews: reviewsArr = [],
     location = "",
     userId,
     _id,
   } = spot;
 
-  const [showModal, setShowModal] = useState(false)
-  const [imageLoading, setImageLoading] = useState(true)
-  const [imageError, setImageError] = useState(false)
-  const navigate = useNavigate()
+  const [showModal, setShowModal] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+  const navigate = useNavigate();
 
   const isCurrentlyOpen = () => {
-    if (!hours?.open || !hours?.close) return false
+    if (!hours?.open || !hours?.close) return false;
     try {
-      const now = new Date()
-      const currentHour = now.getHours()
-      const currentMinute = now.getMinutes()
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
 
       const parseTime = (timeStr) => {
         const match = timeStr.match(/(\d+)(?::(\d+))?\s*(am|pm)/i);
-        if (!match) return null
+        if (!match) return null;
 
         let [_, h, m, period] = match;
         h = parseInt(h, 10);
@@ -152,9 +152,13 @@ export default function SpotCard({ spot, currentUser }) {
 
       <div className="flex items-center justify-center gap-1 text-[14px] mt-[5px] pt-[5px] ml-[5px]">
         <span className="text-[#333]">
-            <AverageRating reviews={reviewsArr} size={20} />
+          <AverageRating reviews={reviewsArr} size={20} />
         </span>
       </div>
+
+      <p className="ml-[6px] text-[12px] text-[#666666] mt-2">
+        uploaded by {userId?.name || "unknown"}
+      </p>
 
       {/* Modal */}
       {showModal && (

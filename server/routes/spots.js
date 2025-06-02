@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
   if (tag) filter.tags = tag;
 
   try {
-    const spots = await Spot.find(filter);
+    const spots = await Spot.find(filter).populate("userId", "name");
     res.json(spots);
   } catch (err) {
     console.error(err);
@@ -85,7 +85,7 @@ router.post("/", upload.single("photo"), async (req, res, next) => {
 // get spot by id
 router.get("/:id", async (req, res) => {
   try {
-    const spot = await Spot.findById(req.params.id);
+    const spot = await Spot.findById(req.params.id).populate("userId", "name");
     if (!spot) return res.status(404).json({ error: "Spot not found" });
     res.json(spot);
   } catch (err) {

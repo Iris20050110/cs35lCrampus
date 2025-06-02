@@ -42,7 +42,9 @@ export default function MoreInformationPage() {
     async function fetchSpot() {
       try {
         setLoading(true);
-        const res = await axios.get(`/api/spots/${spotId}`);
+        const res = await axios.get(`/api/spots/${spotId}`, {
+          withCredentials: true,
+        });
         setSpot(res.data);
         setError(null);
       } catch {
