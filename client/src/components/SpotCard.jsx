@@ -97,21 +97,19 @@ export default function SpotCard({ spot, currentUser }) {
           </h3>
         </Link>
 
-        {}
-        {currentUser &&
-          (currentUser._id === userId || currentUser._id === userId?._id) && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowModal(true);
-              }}
-              className="absolute top-3 right-3 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full p-2 shadow-md transition focus:outline-none focus:ring-0"
-              aria-label="Delete Spot"
-            >
-              <Trash2 size={18} className="text-red-600" />
-            </button>
-          )}
+        {currentUser && currentUser._id === (userId?._id || userId) && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowModal(true);
+            }}
+            className="absolute top-3 right-3 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full p-2 shadow-md transition focus:outline-none focus:ring-0"
+            aria-label="Delete Spot"
+          >
+            <Trash2 size={18} className="text-red-600" />
+          </button>
+        )}
       </div>
 
       <p className="ml-[6px] text-[14px] text-[#4d4d4d] italic my-[2px]">

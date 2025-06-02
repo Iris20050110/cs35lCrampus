@@ -90,10 +90,6 @@ export default function NewReview({ spotId, onReviewAdded }) {
             className="mt-1 p-2 rounded-md bg-white text-oynx focus:outline-none focus:ring-2 focus:ring-slate resize-none"
           />
         </label>
-        <p className="text-[#305252] text-sm">
-          Disclaimer: You can only edit or delete your review during your
-          current session.
-        </p>
         <button
           type="submit"
           disabled={submitting}
