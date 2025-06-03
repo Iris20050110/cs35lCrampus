@@ -118,17 +118,23 @@ const ProfilePage = () => {
             marginBottom: "2rem",
           }}
         >
-          <img
-            src={user.picture || "/default-profile.png"}
-            alt="Profile"
-            style={{
-              width: "120px",
-              height: "120px",
-              borderRadius: "50%",
-              objectFit: "cover",
-              marginRight: "1.5rem",
-            }}
-          />
+        <img
+          src={
+            user.picture
+            ? user.picture.startsWith("http") 
+            ? user.picture 
+            : `http://localhost:5000${user.picture}`
+            : "/default-profile.png"
+          }
+          alt="Profile"
+          style={{
+            width: "120px",
+            height: "120px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            marginRight: "1.5rem",
+          }}
+        />
           <div>
             <p style={{ margin: "0.5rem 0", color: darkColor }}>
               <strong>Name:</strong> {user.name}

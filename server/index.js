@@ -18,6 +18,7 @@ import spotsRouter from "./routes/spots.js";
 import todosRouter from "./routes/todos.js";
 import authRouter from "./routes/user.js";
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -73,9 +74,19 @@ passport.use(
         let user = await User.findOne({ googleId: profile.id });
 
         if (user) {
-          user.name = profile.displayName;
-          user.picture = profile.photos[0].value;
-          user.email = profile.emails[0].value;
+          // Only update fields if they haven't been manually changed
+          if (!user.name || user.name === profile.displayName) {
+            user.name = profile.displayName;
+          }
+
+          if (!user.picture || user.picture.includes("googleusercontent")) {
+            user.picture = profile.photos[0].value;
+          }
+
+          if (!user.email) {
+            user.email = profile.emails[0].value;
+          }
+
           await user.save();
         } else {
           user = await User.create({
@@ -139,6 +150,7 @@ mongoose.connection.on("reconnected", () => {
 
 // routes
 app.use("/api/auth", googleAuthRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/spots", spotsRouter);
 app.use("/api/todos", todosRouter);
 app.use("/api/tasks", ensureAuth, todosRouter);
