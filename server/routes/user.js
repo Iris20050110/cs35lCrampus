@@ -38,7 +38,6 @@ router.post("/signup", (req, res) => {
   res.status(200).json({ msg: "Received!" });
 });
 
-// ✅ GET /api/auth/:id → Fetch user info (exclude password)
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -50,10 +49,9 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ✅ PUT /api/auth/update → Update user info
 router.put('/update', upload.single('picture'), async (req, res) => {
   try {
-    const userId = req.user?.id || req.user?._id || req.body.userId; // fallback options
+    const userId = req.user?.id || req.user?._id || req.body.userId;
     if (!userId) return res.status(401).json({ message: 'Unauthorized' });
 
     const { name, email, password } = req.body;
