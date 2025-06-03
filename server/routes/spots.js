@@ -72,7 +72,7 @@ router.post("/", upload.single("photo"), async (req, res, next) => {
       userId: req.user._id,
     });
 
-    // Populate the user data before sending response
+    // populate the user data before sending response
     await spot.populate("userId", "name");
 
     res.status(201).json(spot);
@@ -123,6 +123,7 @@ router.get("/image/:id", async (req, res) => {
   }
 });
 
+// delete a spot
 router.delete("/:id", async (req, res) => {
   try {
     if (!req.user) {
@@ -130,11 +131,7 @@ router.delete("/:id", async (req, res) => {
     }
     const spot = await Spot.findById(req.params.id);
     if (!spot) return res.status(404).json({ error: "Spot not found" });
-    if (spot.userId.toString() !== req.user._id.toString()) {
-      return res
-        .status(403)
-        .json({ error: "You do not have permission to delete this spot." });
-    }
+    // will never encounter a no permission because the button shouldn't even pop up
     if (spot.photoFileId) {
       try {
         await gfs.delete(new mongoose.Types.ObjectId(spot.photoFileId));
@@ -183,7 +180,7 @@ router.post("/:id/reviews", async (req, res) => {
     spot.reviews.push(newReview);
     await spot.save();
 
-    // Fetch the updated spot with populated user data
+    // fetch the updated spot with populated user data
     const updatedSpot = await Spot.findById(req.params.id).populate(
       "reviews.userId",
       "_id name"
@@ -262,7 +259,7 @@ router.patch("/:id/reviews/:reviewId", async (req, res) => {
     review.text = text;
     await spot.save();
 
-    // Fetch the updated spot with populated user data
+    // fetch the updated spot with populated user data
     const updatedSpot = await Spot.findById(req.params.id).populate(
       "reviews.userId",
       "_id name"
@@ -279,9 +276,25 @@ router.patch("/:id/reviews/:reviewId", async (req, res) => {
 // Report button counter
 router.post("/:id/report", async (req, res) => {
   try {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ error: "You must be signed in to report a spot" });
+    }
+
     const spot = await Spot.findById(req.params.id);
     if (!spot) return res.status(404).json({ error: "Spot not found" });
 
+    // has the user already reported this spot?
+    if (spot.reportedBy.includes(req.user._id)) {
+      return res
+        .status(400)
+        .json({ error: "You have already reported this spot" });
+    }
+
+    // Add user to reportedBy array and increment report count
+    spot.reportedBy.push(req.user._id);
+    spot.reportCount = (spot.reportCount || 0) + 1;
     spot.reportCount = (spot.reportCount || 0) + 1; //counter++
 
     if (spot.reportCount >= 5) {
@@ -294,7 +307,11 @@ router.post("/:id/report", async (req, res) => {
       }
 
       await spot.deleteOne();
-      return res.json({ success: true, deleted: true, message: "Spot deleted after 5 reports" });
+      return res.json({
+        success: true,
+        deleted: true,
+        message: "Spot deleted after 5 reports",
+      });
     }
 
     await spot.save();
@@ -304,6 +321,5 @@ router.post("/:id/report", async (req, res) => {
     res.status(500).json({ error: "Failed to report spot" });
   }
 });
-
 
 export default router;

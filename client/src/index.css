@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme variables */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -80,10 +79,8 @@ button:focus-visible {
   }
 }
 
-/* TODO */
 
 @layer utilities {
-  /* retrofit a “divide-tan” that actually sets the Tailwind divide color */
   .divide-tan > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 1;
     --tw-divide-color: var(--c-tan);

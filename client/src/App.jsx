@@ -9,19 +9,19 @@ import AddSpotPage from "./pages/addSpotPage";
 import LoginPage from "./pages/loginPage";
 import ProfilePage from "./pages/profilePage";
 import AssignmentPage from "./pages/assignmentPage";
-import MoreInformationPage from "./pages/MoreInformationPage";  // adjust path if needed
+import MoreInformationPage from "./pages/MoreInformationPage"; 
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />, // your layout wrapper
+    element: <MainLayout />,
     children: [
-      { index: true, element: <MainPage /> }, // renders at "/"
-      { path: "add", element: <AddSpotPage /> }, // renders at "/add"
+      { index: true, element: <MainPage /> }, 
+      { path: "add", element: <AddSpotPage /> }, 
       { path: "login", element: <LoginPage /> },
-      { path: "profile", element: <ProfilePage /> }, // not logged in
-      { path: "profile/:id", element: <ProfilePage /> }, // logged in
+      { path: "profile", element: <ProfilePage /> },
+      { path: "profile/:id", element: <ProfilePage /> }, 
       { path: "todos", element: <AssignmentPage /> },
       { path: "spots/:id", element: <MoreInformationPage /> },
     ],
@@ -31,17 +31,3 @@ const router = createBrowserRouter([
 export default function App() {
   return <RouterProvider router={router} />;
 }
-
-
-// function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         {/* other routes you may have */}
-//         <Route path="/spots/:id" element={<MoreInformationPage />} />
-//       </Routes>
-//     </Router>
-//   );
-// }
-
-//export default App;

@@ -1,4 +1,3 @@
-import React from "react";
 import { Star, StarHalf } from "lucide-react";
 
 const AverageRating = ({ reviews = [], size = 32 }) => {

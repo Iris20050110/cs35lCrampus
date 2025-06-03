@@ -13,18 +13,23 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    password: String, // not required for Google
+    password: String,
     name: {
       type: String,
       required: true,
     },
-    picture: String, // optional profile photo
+    picture: String,
+    pictureId: {
+      type: mongoose.Schema.Types.ObjectId,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
 
-
-// Hash password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   try {
@@ -36,14 +41,10 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// For password login
+// password login
 userSchema.methods.comparePassword = function (candidatePassword) {
-    return bcrypt.compare(candidatePassword, this.password);
+  return bcrypt.compare(candidatePassword, this.password);
 };
-  
-// Export model
-// Export model
-// module.exports = mongoose.model('User', userSchema);
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;

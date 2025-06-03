@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import axios from "axios";
 import { Star } from "lucide-react";
 
-export default function Review({ spotId, currentUser }) {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export default function Review({ spotId, currentUser , reviews , onReviewChanged } ) {
+ // const [reviews, setReviews] = useState([]);
+ // const [loading, setLoading] = useState(true);
+ //  const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState(null);
 
   const [editingID, setEditingID] = useState(null);
   const [editRating, setEditRating] = useState(5);
   const [editText, setEditText] = useState("");
-
+  const [error, setError] = useState(null);
+/*
   useEffect(() => {
     async function fetchReviews() {
       try {
@@ -31,14 +32,19 @@ export default function Review({ spotId, currentUser }) {
     }
   }, [spotId, currentUser]);
 
-  if (loading) return <div>Loading reviews…</div>;
-  if (error) return <div className="text-amaranth">{error}</div>;
+  */
 
+  //if (loading) return <div>Loading reviews…</div>;
+  //if (error) return <div className="text-amaranth">{error}</div>;
+
+/*
+  
   const refresh = async () => {
-    const res = await axios.get(`/api/spots/${spotId}/reviews`);
-    setReviews(res.data);
+    //const res = await axios.get(`/api/spots/${spotId}/reviews`);
+    //setReviews(res.data);
+    window.location.reload();
   };
-
+*/
   const startEdit = (r) => {
     setEditingID(r._id);
     setEditRating(r.rating);
@@ -50,7 +56,26 @@ export default function Review({ spotId, currentUser }) {
     setEditRating(5);
     setEditText("");
   };
+  /*
 
+  const saveEdit = async () => {
+   try {
+      setError(null);
+      await axios.patch(`/api/spots/${spotId}/reviews/${editingID}`, { rating: editRating, text: editText.trim() }, { withCredentials: true });
+     window.location.reload(); // NEW: cause parent to re‐fetch everything
+   } catch (err) { ... }
+
+ };
+
+ 
+ const deleteReview = async (id) => {
+   try {
+     setError(null);
+     await axios.delete(`/api/spots/${spotId}/reviews/${id}`, { withCredentials: true });
+     window.location.reload(); // NEW: same approach
+   } catch (err) { … }
+ };
+*/
   const saveEdit = async () => {
     try {
       setError(null);
@@ -59,8 +84,9 @@ export default function Review({ spotId, currentUser }) {
         { rating: editRating, text: editText.trim() },
         { withCredentials: true }
       );
-      await refresh();
+      // await refresh();
       cancelEdit();
+      onReviewChanged();
     } catch (err) {
       console.error("Failed to update review:", err);
       setError(err.response?.data?.error || "Failed to update review.");
@@ -73,9 +99,10 @@ export default function Review({ spotId, currentUser }) {
       await axios.delete(`/api/spots/${spotId}/reviews/${id}`, {
         withCredentials: true,
       });
-      await refresh();
+      // await refresh();
       setShowDeleteModal(false);
       setReviewToDelete(null);
+      onReviewChanged();
     } catch (err) {
       console.error("Failed to delete review:", err);
       setError(err.response?.data?.error || "Failed to delete review.");
@@ -96,7 +123,7 @@ export default function Review({ spotId, currentUser }) {
   return (
     <div className="mt-8 font-[lexend]">
       <h2 className="text-2xl font-semibold mb-4">Reviews</h2>
-
+      {error}
       {reviews.length === 0 ? (
         <p>No reviews yet.</p>
       ) : (

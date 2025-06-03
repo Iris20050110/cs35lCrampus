@@ -13,9 +13,6 @@ const ProfilePage = () => {
   const [error, setError] = useState(false);
   const [editing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [newPicture, setNewPicture] = useState(null);
 
   const backColor = "#FCEFE6";
@@ -40,16 +37,9 @@ const ProfilePage = () => {
   }, [isAuthenticated]);
 
   const handleUpdate = async () => {
-    if (newPassword && newPassword !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
     const formData = new FormData();
     formData.append("userId", user._id);
     if (newName) formData.append("name", newName);
-    if (newEmail) formData.append("email", newEmail);
-    if (newPassword) formData.append("password", newPassword);
     if (newPicture) formData.append("picture", newPicture);
 
     try {
@@ -129,8 +119,20 @@ const ProfilePage = () => {
           }}
         >
           <img
-            src={user.picture || "/default-profile.png"}
+            src={
+              user.pictureId
+                ? `http://localhost:5000/api/auth/profile-image/${user.pictureId}`
+                : user.picture
+                ? user.picture
+                : "/default-profile.png"
+            }
             alt="Profile"
+            onError={(e) => {
+              console.error("Error loading profile image:", e);
+              console.log("Current user data:", user);
+              e.target.onerror = null;
+              e.target.src = user.picture || "/default-profile.png";
+            }}
             style={{
               width: "120px",
               height: "120px",
@@ -165,42 +167,24 @@ const ProfilePage = () => {
               }}
             />
             <input
-              type="email"
-              placeholder="New Email (optional)"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              style={{
-                padding: "0.5rem",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <input
-              type="password"
-              placeholder="New Password (optional)"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              style={{
-                padding: "0.5rem",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{
-                padding: "0.5rem",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <input
               type="file"
-              onChange={(e) => setNewPicture(e.target.files[0])}
-              style={{}}
+              accept=".png,.jpg,.jpeg,.gif"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const validTypes = [
+                  "image/png",
+                  "image/jpeg",
+                  "image/jpg",
+                  "image/gif",
+                ];
+                if (!validTypes.includes(file.type)) {
+                  alert("Please upload an image in PNG, JPG, or GIF format.");
+                  return;
+                }
+                setNewPicture(file);
+              }}
             />
             <div>
               <button

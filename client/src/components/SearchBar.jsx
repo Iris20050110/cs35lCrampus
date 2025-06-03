@@ -12,6 +12,7 @@ export default function SearchBar({ onSearch }) {
   const tagInputRef = useRef(null);
   const tagDropdownRef = useRef(null);
 
+  // Tag options (add to this list to add more tag options)
   const availableTags = [
     "quiet",
     "coffee",
@@ -41,7 +42,8 @@ export default function SearchBar({ onSearch }) {
     }
   }, [tagInput, selectedTags]);
 
-  // Search suggestions - simulating API call to find locations matching the query
+  // Search suggestions -- simulating API call to find locations matching the query
+  // Display them dynamically and click to go to it
   useEffect(() => {
     if (!query.trim()) return setSuggestions([]);
 
@@ -128,7 +130,7 @@ export default function SearchBar({ onSearch }) {
               autoComplete="off"
             />
 
-            {/* Search Suggestions Dropdown */}
+            {/* search suggestions */}
             {suggestions.length > 0 && (
               <ul className="absolute z-3 bg-[#FFFF] rounded-[5px] text-left px-[9px] w-full m-3 max-h-20 overflow-auto">
                 {suggestions.map((suggestion, index) => (
@@ -148,7 +150,7 @@ export default function SearchBar({ onSearch }) {
             )}
           </div>
 
-          {/* Tag Input Container */}
+          {/* tags */}
           <div className="relative px-2" ref={tagDropdownRef}>
             <div className="bg-[#D4DEDB] rounded-[5px] px-[5px] py-[5px] m-[5px] flex flex-wrap items-center gap-1">
               {selectedTags.map((tag) => (
@@ -169,7 +171,7 @@ export default function SearchBar({ onSearch }) {
                 </div>
               ))}
 
-              {/* Tag Input */}
+              {/* tag inputs */}
               <input
                 ref={tagInputRef}
                 type="text"
@@ -183,7 +185,7 @@ export default function SearchBar({ onSearch }) {
               />
             </div>
 
-            {/* Tag Suggestions Dropdown */}
+            {/* tag suggestions */}
             {showTagDropdown && tagSuggestions.length > 0 && (
               <ul className="absolute z-[100px] bg-[#FFFF] border-none rounded-[8px] px-[9px] m-1.5 max-h-20 overflow-auto">
                 {tagSuggestions
@@ -204,7 +206,7 @@ export default function SearchBar({ onSearch }) {
             )}
           </div>
 
-          {/* Search Button */}
+          {/* earch */}
           <button
             type="button"
             onClick={handleSubmit}

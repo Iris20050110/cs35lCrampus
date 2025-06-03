@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TasksByDay from "../components/tasksByDay";
+import TasksByDay from "../components/TasksByDay";
 import CreateTodo from "./schedulePage";
 import NavBar from "../components/navbar";
 import useAuth from "../hooks/useAuth";
