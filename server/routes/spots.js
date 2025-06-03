@@ -11,7 +11,12 @@ router.get("/", async (req, res) => {
   const { search = "", tag = "" } = req.query;
   const filter = {};
   if (search) filter.name = new RegExp(search, "i");
-  if (tag) filter.tags = tag;
+  if (tag) {
+    const tags = Array.isArray(tag) ? tag : tag.split(",");
+    if (tags.length > 0) {
+      filter.tags = { $all: tags };
+    }
+  }
 
   try {
     const spots = await Spot.find(filter)

@@ -9,10 +9,11 @@ export default function MainPage() {
   const [spots, setSpots] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
-  const fetchSpots = async (q = "", tag = "") => {
+  const fetchSpots = async (q = "", tags = []) => {
+    const tagsParam = Array.isArray(tags) ? tags.join(",") : tags;
     const { data } = await axios.get(
       `/api/spots?search=${encodeURIComponent(q)}&tag=${encodeURIComponent(
-        tag
+        tagsParam
       )}`,
       { withCredentials: true }
     );
