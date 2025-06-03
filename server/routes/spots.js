@@ -276,18 +276,16 @@ router.patch("/:id/reviews/:reviewId", async (req, res) => {
   }
 });
 
-// POST /api/spots/:id/report
+// Report button counter
 router.post("/:id/report", async (req, res) => {
   try {
     const spot = await Spot.findById(req.params.id);
     if (!spot) return res.status(404).json({ error: "Spot not found" });
 
-    // Increment the report count
-    spot.reportCount = (spot.reportCount || 0) + 1;
+    spot.reportCount = (spot.reportCount || 0) + 1; //counter++
 
     if (spot.reportCount >= 5) {
-      // Optionally delete photo from GridFS
-      if (spot.photoFileId) {
+      if (spot.photoFileId) { //delete photo from grid
         try {
           await gfs.delete(new mongoose.Types.ObjectId(spot.photoFileId));
         } catch (err) {
