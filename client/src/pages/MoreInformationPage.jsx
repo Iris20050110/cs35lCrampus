@@ -14,20 +14,30 @@ export default function MoreInformationPage() {
   const [spot, setSpot] = useState(passedSpot);
   const [loading, setLoading] = useState(passedSpot ? false : true);
   const [error, setError] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(0);
+  //const [refreshToken, setRefreshToken] = useState(0);
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
+
+    
+
+
+  
   const handleReviewAdded = useCallback(async () => {
     try {
       const res = await axios.get(`/api/spots/${spotId}`, {
         withCredentials: true,
       });
       setSpot(res.data);
-      setRefreshToken((prev) => prev + 1);
+      //setRefreshToken((prev) => prev + 1);
     } catch (err) {
       console.error("Failed to refresh spot data:", err);
     }
   }, [spotId]);
+
+
+
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -104,6 +114,23 @@ export default function MoreInformationPage() {
     description = "",
   } = spot;
 
+  
+  
+
+  const reviewsPerPage = 3;
+  const totalPages = Math.ceil(reviewsArr.length / reviewsPerPage);
+
+    const safePage =
+    currentPage > totalPages
+      ? totalPages > 0
+        ? totalPages
+        : 1
+      : currentPage;
+
+  const paginatedReviews = reviewsArr.slice(
+    (safePage - 1) * reviewsPerPage,
+    safePage * reviewsPerPage
+    );  
   return (
     <div className="w-screen p-8 bg-tan font-[lexend] text-oynx">
       <Link to="/" className="px-4 py-2 bg-slate text-white rounded mb-10">
@@ -163,18 +190,46 @@ export default function MoreInformationPage() {
         </div>
       </div>
 
+      
+      
+
       <div className="mt-8">
         {reviewsArr.length === 0 || reviewsArr === 0 ? (
           <p className="text-lg italic text-gray-600 mb-6">No reviews yet.</p>
         ) : (
           <div className="mb-6">
-            <Review
-              key={refreshToken}
+            <Review 
+            //  key={refreshToken}
+              onReviewChanged={handleReviewAdded}
               spotId={spotId}
               currentUser={currentUser}
+              reviews={paginatedReviews} //pagination 
             />
           </div>
         )}
+
+
+        {reviewsArr.length > reviewsPerPage && (     /// pagination 
+        <div className="flex justify-center gap-2 mt-4 mb-8">
+          {Array.from({
+            length: Math.ceil(reviewsArr.length / reviewsPerPage),
+          }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentPage(index + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === index + 1
+                  ? "bg-[#305252] text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )} 
+
+      
         <NewReview spotId={spotId} onReviewAdded={handleReviewAdded} />
       </div>
     </div>

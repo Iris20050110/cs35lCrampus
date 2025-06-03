@@ -98,23 +98,23 @@ return (
           <img
             src={user.picture}
             alt="Profile"
-            className="w-[40px] h-[40px] rounded-full cursor-pointer border border-[#3d6969]"
+            className="w-[40px] h-[40px] rounded-full cursor-pointer focus:outline-none focus:ring-0]"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           />
         )}
 
         {dropdownOpen && (
-          <div className="absolute right-0 mt-2 w-48 bg-[#b2d2c3] border border-[#3d6969] shadow-md rounded-xl py-2 z-50">
+          <div className="absolute right-0 mt-2 w-48 bg-[#b2d2c3] shadow-md rounded-xl py-2 px-2 z-50">
             <Link
               to="/profile"
-              className="block px-4 py-2 text-[#3d6969] hover:bg-[#a5c5b7] transition"
+              className="block px-4 py-2 text-[#3d6969] hover:bg-[#a5c5b7] rounded-md transition focus:outline-none focus:ring-0 hover:text-[#3d6969] "
               onClick={() => setDropdownOpen(false)}
             >
               Profile
             </Link>
             <button
               onClick={handleLogout}
-              className="w-full text-left px-4 py-2 text-[#3d6969] hover:bg-[#a5c5b7] transition"
+              className="w-full text-left px-4 py-2 text-[#3d6969]  transition focus:outline-none focus:ring-white outline-none"
             >
               Logout
             </button>
@@ -132,7 +132,7 @@ return (
           </p>
           <button
             onClick={() => setShowPopup(false)}
-            className="mt-4 px-4 py-2 bg-[#305252] text-white rounded hover:bg-[#203534] transition"
+            className="mt-4 px-4 py-2 bg-[#305252] text-white rounded hover:bg-[#203534] transition focus:outline-none focus:ring-0"
           >
             Close
           </button>
