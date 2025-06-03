@@ -26,7 +26,12 @@ const spotSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  reportCount: {
+    type: Number,
+    default: 0,
+  },
 });
+
 
 const Spot = mongoose.model("Spot", spotSchema);
 export default Spot;

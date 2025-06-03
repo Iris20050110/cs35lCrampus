@@ -276,4 +276,36 @@ router.patch("/:id/reviews/:reviewId", async (req, res) => {
   }
 });
 
+// POST /api/spots/:id/report
+router.post("/:id/report", async (req, res) => {
+  try {
+    const spot = await Spot.findById(req.params.id);
+    if (!spot) return res.status(404).json({ error: "Spot not found" });
+
+    // Increment the report count
+    spot.reportCount = (spot.reportCount || 0) + 1;
+
+    if (spot.reportCount >= 5) {
+      // Optionally delete photo from GridFS
+      if (spot.photoFileId) {
+        try {
+          await gfs.delete(new mongoose.Types.ObjectId(spot.photoFileId));
+        } catch (err) {
+          console.error("Error deleting photo:", err);
+        }
+      }
+
+      await spot.deleteOne();
+      return res.json({ success: true, deleted: true, message: "Spot deleted after 5 reports" });
+    }
+
+    await spot.save();
+    res.json({ success: true, reportCount: spot.reportCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to report spot" });
+  }
+});
+
+
 export default router;
