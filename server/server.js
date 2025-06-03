@@ -19,7 +19,6 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 
-/*
 const { default: spotsRouter } = await import("./routes/spots.js");
 await import("./gridfs.js");
 app.use("/api/spots", spotsRouter);
@@ -27,16 +26,5 @@ app.use("/api/spots", spotsRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-*/
 
-(async () => {
-  const { default: spotsRouter } = await import("./routes/spots.js");
-  await import("./gridfs.js");
-  app.use("/api/spots", spotsRouter);
-
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-})();
-
-//a; //gpt told me to delete this
+a;
