@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Review from "../components/Review";
 import NewReview from "../components/NewReview";
@@ -7,6 +7,7 @@ import AverageRating from "../components/AverageRating";
 
 export default function MoreInformationPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const passedSpot = location.state?.spot ?? null;
   const { id: paramsId } = useParams();
   const spotId = passedSpot?._id || paramsId;
@@ -16,17 +17,55 @@ export default function MoreInformationPage() {
   const [error, setError] = useState(null);
   const [refreshToken, setRefreshToken] = useState(0);
   const [currentUser, setCurrentUser] = useState(null);
-  const handleReviewAdded = useCallback(async () => {
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportCount, setReportCount] = useState(passedSpot?.reportCount || 0);
+  const [reportError, setReportError] = useState("");
+
+  const fetchSpotData = useCallback(async () => {
     try {
       const res = await axios.get(`/api/spots/${spotId}`, {
         withCredentials: true,
       });
       setSpot(res.data);
+      setReportCount(res.data.reportCount || 0);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to fetch spot data:", err);
+      setError("Failed to load spot information.");
+    }
+  }, [spotId]);
+
+  const handleReviewAdded = useCallback(async () => {
+    try {
+      await fetchSpotData();
       setRefreshToken((prev) => prev + 1);
     } catch (err) {
       console.error("Failed to refresh spot data:", err);
     }
-  }, [spotId]);
+  }, [fetchSpotData]);
+
+  const handleReport = async () => {
+    try {
+      const response = await axios.post(
+        `/api/spots/${spotId}/report`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.data.deleted) {
+        navigate("/");
+      } else {
+        setReportCount(response.data.reportCount);
+        await fetchSpotData();
+      }
+      setReportError("");
+    } catch (err) {
+      console.error("Failed to report spot:", err);
+      setReportError(err.response?.data?.error || "You can only report once");
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -44,18 +83,15 @@ export default function MoreInformationPage() {
   }, []);
 
   useEffect(() => {
-    if (passedSpot) return;
+    if (passedSpot) {
+      setReportCount(passedSpot.reportCount || 0);
+      return;
+    }
 
     async function fetchSpot() {
       try {
         setLoading(true);
-        const res = await axios.get(`/api/spots/${spotId}`, {
-          withCredentials: true,
-        });
-        setSpot(res.data);
-        setError(null);
-      } catch {
-        setError("Failed to load spot information.");
+        await fetchSpotData();
       } finally {
         setLoading(false);
       }
@@ -67,7 +103,7 @@ export default function MoreInformationPage() {
       setError("No spot ID provided");
       setLoading(false);
     }
-  }, [spotId, passedSpot]);
+  }, [spotId, passedSpot, fetchSpotData]);
 
   if (loading) {
     return (
@@ -112,8 +148,25 @@ export default function MoreInformationPage() {
 
       <div className="flex flex-row items-start gap-8 w-full">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center space-x-2 mb-4 text-xl">
-            <AverageRating reviews={reviewsArr} />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-2 text-xl">
+              <AverageRating reviews={reviewsArr} />
+            </div>
+            <div className="flex flex-col items-end">
+              {currentUser && (
+                <button
+                  onClick={() => setShowReportModal(true)}
+                  className="px-4 py-2 bg-[#b6244f] text-white rounded-md hover:bg-[#a01d43] transition-colors"
+                >
+                  Report Spot
+                </button>
+              )}
+              {reportError && (
+                <span className="text-amaranth text-sm mt-2">
+                  {reportError}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2 text-lg text-slate break-words mb-4">
@@ -176,6 +229,40 @@ export default function MoreInformationPage() {
         )}
         <NewReview spotId={spotId} onReviewAdded={handleReviewAdded} />
       </div>
+
+      {/* report Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full mx-4">
+            <h2 className="text-lg font-semibold text-[#305252] mb-2">
+              Report this spot?
+            </h2>
+            <p className="text-sm text-gray-500 mb-5">
+              This spot has been reported {reportCount} times. At 5 reports, it
+              will be automatically deleted.
+            </p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={async () => {
+                  await handleReport();
+                  if (!reportError) {
+                    setShowReportModal(false);
+                  }
+                }}
+                className="bg-[#b6244f] text-white px-4 py-2 rounded hover:bg-[#a01d43] text-sm"
+              >
+                Yes, Report
+              </button>
+              <button
+                onClick={() => setShowReportModal(false)}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 text-sm"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

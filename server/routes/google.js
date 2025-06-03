@@ -23,10 +23,10 @@ router.get(
 // Check if user is authenticated
 router.get("/check", (req, res) => {
   if (req.isAuthenticated()) {
-    const { _id, name, email, picture } = req.user;
+    const { _id, name, email, picture, pictureId } = req.user;
     res.json({
       isAuthenticated: true,
-      user: { _id, name, email, picture },
+      user: { _id, name, email, picture, pictureId },
     });
   } else {
     res.json({ isAuthenticated: false });

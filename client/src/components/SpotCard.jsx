@@ -163,11 +163,15 @@ export default function SpotCard({ spot, currentUser }) {
           <AverageRating reviews={reviewsArr} size={20} />
         </span>
       </div>
-      {/* Uploaded by styling */}
 
-      <p className="ml-[6px] text-[12px] text-[#666666] mt-2">
-        Uploaded by {userId?.name || "unknown"}
-      </p>
+      <div className="flex justify-between items-center mt-2">
+        <p className="ml-[6px] text-[12px] text-[#666666]">
+          Uploaded by {userId?.name || "unknown"}
+        </p>
+        <p className="text-[12px] text-amaranth font-medium">
+          {spot.reportCount || 0} Reports
+        </p>
+      </div>
 
       {/* delete Modal */}
       {showModal && (

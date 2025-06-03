@@ -13,16 +13,22 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    password: String, 
+    password: String,
     name: {
       type: String,
       required: true,
     },
-    picture: String, 
+    picture: String,
+    pictureId: {
+      type: mongoose.Schema.Types.ObjectId,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
-
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -37,9 +43,8 @@ userSchema.pre("save", async function (next) {
 
 // password login
 userSchema.methods.comparePassword = function (candidatePassword) {
-    return bcrypt.compare(candidatePassword, this.password);
+  return bcrypt.compare(candidatePassword, this.password);
 };
-  
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;

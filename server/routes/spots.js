@@ -276,10 +276,24 @@ router.patch("/:id/reviews/:reviewId", async (req, res) => {
 // POST /api/spots/:id/report
 router.post("/:id/report", async (req, res) => {
   try {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ error: "You must be signed in to report a spot" });
+    }
+
     const spot = await Spot.findById(req.params.id);
     if (!spot) return res.status(404).json({ error: "Spot not found" });
 
-    // increment the report count
+    // has the user already reported this spot?
+    if (spot.reportedBy.includes(req.user._id)) {
+      return res
+        .status(400)
+        .json({ error: "You have already reported this spot" });
+    }
+
+    // Add user to reportedBy array and increment report count
+    spot.reportedBy.push(req.user._id);
     spot.reportCount = (spot.reportCount || 0) + 1;
 
     if (spot.reportCount >= 5) {
