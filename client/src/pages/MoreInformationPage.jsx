@@ -16,7 +16,6 @@ export default function MoreInformationPage() {
   const [error, setError] = useState(null);
   const [refreshToken, setRefreshToken] = useState(0);
   const [currentUser, setCurrentUser] = useState(null);
-
   const handleReviewAdded = useCallback(async () => {
     try {
       const res = await axios.get(`/api/spots/${spotId}`, {

@@ -46,7 +46,6 @@ export default function Navbar() {
     { path: "/", label: "Home" },
     { path: "/add", label: "Add Spot" },
     { path: "/todos", label: "Assignments" },
-   // { path: "/profile", label: "Profile" },
     ...(isLoggedIn ? [] : [{ path: "/login", label: "Login" }]),
   ];
 
@@ -92,7 +91,6 @@ return (
         ))}
       </div>
 
-      {/* Right: profile picture and dropdown */}
       <div className="relative ml-[14px]" ref={dropdownRef}>
         {user?.picture && (
           <img
@@ -123,7 +121,7 @@ return (
       </div>
     </nav>
 
-    {/* Optional logout popup */}
+    {/* logout popup */}
     {showPopup && (
       <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30 backdrop-blur-sm">
         <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full mx-4">

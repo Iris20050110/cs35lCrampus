@@ -44,6 +44,7 @@ export default function MainPage() {
         </div>
       </header>
       <main className="px-8 py-6">
+        {/*Display the spots' information*/}
         <div className="flex flex-wrap gap-6 justify-center">
           {spots?.map((spot) => (
             <div

@@ -21,28 +21,36 @@ export default function SpotCard({ spot, currentUser }) {
   const [imageError, setImageError] = useState(false);
   const navigate = useNavigate();
 
+  // isAvailable tag logic here
   const isCurrentlyOpen = () => {
     if (!hours?.open || !hours?.close) return false;
     try {
       const now = new Date();
       const currentHour = now.getHours();
       const currentMinute = now.getMinutes();
-
+      // Get the current time
       const parseTime = (timeStr) => {
+        // regex!!
         const match = timeStr.match(/(\d+)(?::(\d+))?\s*(am|pm)/i);
         if (!match) return null;
 
         let [_, h, m, period] = match;
         h = parseInt(h, 10);
         m = m ? parseInt(m, 10) : 0;
-        if (period.toLowerCase() === "pm" && h < 12) h += 12;
-        if (period.toLowerCase() === "am" && h === 12) h = 0;
+
+        if (period.toLowerCase() === "pm" && h < 12) {
+          h += 12;
+        }
+        if (period.toLowerCase() === "am" && h === 12) {
+          h = 0;
+        }
 
         return { hours: h, minutes: m };
       };
 
       const openTime = parseTime(hours.open);
       const closeTime = parseTime(hours.close);
+
       if (!openTime || !closeTime) return false;
 
       const nowMins = currentHour * 60 + currentMinute;
@@ -56,7 +64,7 @@ export default function SpotCard({ spot, currentUser }) {
       return false;
     }
   };
-
+  // Delete spots (fixed: can delete after you sign out now)
   const handleDelete = async () => {
     try {
       await axios.delete(`/api/spots/${_id}`, { withCredentials: true });
@@ -68,13 +76,14 @@ export default function SpotCard({ spot, currentUser }) {
   };
 
   return (
-    <div className="w-full font-[lexend] relative">
+    <div className="w-full font-[lexend]">
       <div className="relative">
         {imageLoading && photoFileId && (
-          <div className="absolute inset-0 bg-[#bfd9cd] animate-pulse rounded-[13px] flex items-center justify-center">
+          <div className="bg-[#bfd9cd] animate-pulse rounded-[13px] flex items-center justify-center">
             <span className="text-[#305252]">Loading...</span>
           </div>
         )}
+        {/* deal with the photos */}
         <img
           src={photoFileId ? `/api/spots/image/${photoFileId}` : ""}
           alt={name}
@@ -92,11 +101,11 @@ export default function SpotCard({ spot, currentUser }) {
           </div>
         )}
         <Link to={`/spots/${_id}`}>
-          <h3 className="ml-[6px] text-[24px] font-extrabold text-[#1a3d3c] drop-shadow-sm tracking-wide mb-[4px] mt-[4px]">
+          <h3 className="ml-[6px] text-[24px] text-[#1a3d3c] mb-[4px] mt-[4px]">
             {name}
           </h3>
         </Link>
-
+        {/* deletion button */}
         {currentUser && currentUser._id === (userId?._id || userId) && (
           <button
             onClick={(e) => {
@@ -104,7 +113,7 @@ export default function SpotCard({ spot, currentUser }) {
               e.stopPropagation();
               setShowModal(true);
             }}
-            className="absolute top-3 right-3 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full p-2 shadow-md transition focus:outline-none focus:ring-0"
+            className="absolute top-3 right-3 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full p-2 hober focus:outline-none focus:ring-0"
             aria-label="Delete Spot"
           >
             <Trash2 size={18} className="text-red-600" />
@@ -125,7 +134,7 @@ export default function SpotCard({ spot, currentUser }) {
           ? `Open ${hours.open} – ${hours.close}`
           : "Hours not available"}
       </p>
-
+      {/*is this available?*/}
       <div className="flex flex-wrap my-[5px] justify-center">
         {hours?.open &&
           hours?.close &&
@@ -154,12 +163,13 @@ export default function SpotCard({ spot, currentUser }) {
           <AverageRating reviews={reviewsArr} size={20} />
         </span>
       </div>
+      {/* Uploaded by styling */}
 
       <p className="ml-[6px] text-[12px] text-[#666666] mt-2">
-        uploaded by {userId?.name || "unknown"}
+        Uploaded by {userId?.name || "unknown"}
       </p>
 
-      {/* Modal */}
+      {/* delete Modal */}
       {showModal && (
         <div className="absolute top-0 left-0 w-full h-full z-10 bg-black bg-opacity-40 flex items-center justify-center rounded-[13px]">
           <div className="bg-white rounded-xl shadow-lg p-5 w-[95%] text-center animate-scaleIn">
