@@ -76,7 +76,7 @@ export default function Navbar() {
 return (
   <>
     <nav className="bg-[#b2d2c3] text-[#3d6969] mx-[100px] px-[6px] py-[3px] flex justify-center items-center shadow-md rounded-[10px]">
-      {/* Left nav links */}
+      {/* nav links */}
       <div className="flex gap-[24px]">
         {navItems.map(({ path, label }) => (
           <Link

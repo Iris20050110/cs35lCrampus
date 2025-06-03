@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../components/navbar";
 
@@ -11,16 +11,16 @@ const LoginPage = () => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/check', {
-        credentials: 'include' // for cookies?
+      const response = await fetch("http://localhost:5000/api/auth/check", {
+        credentials: "include", // for cookies?
       });
       const data = await response.json();
-      
+
       if (data.isAuthenticated) {
-        navigate('/');
+        navigate("/");
       }
     } catch (err) {
-      console.error('Error checking auth status:', err);
+      console.error("Error checking auth status:", err);
     }
   };
 
@@ -41,7 +41,6 @@ const LoginPage = () => {
           Sign in with Google
         </button>
       </div>
-
     </div>
   );
 };
