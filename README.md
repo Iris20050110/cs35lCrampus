@@ -1,5 +1,5 @@
 # Crampus 
-Crampus is a website that showcases various UCLA study spots, from the Hill to on campus, and even the off campus study spots in Westwood. It can be used by students looking for a certain study spot filtered by building type, outlet availability, and whether there's food nearby. The app prioritizes user upload and engagement, with the ability to upload new study spots that others may not know about, and even leave reviews and ratings on certain spots. Students can also log in and use the built-in todo-list and assignment tracker, making the app fit for planning a study crawl during finals.
+Crampus is a website that showcases various UCLA study spots, from the Hill to on campus, and even the off campus study spots in Westwood. It can be used by students looking for a certain study spot filtered by building type, outlet availability, and whether there's food nearby. The app prioritizes user engagement, with the ability to upload new study spots that others may not know about, and even leave reviews and ratings on certain spots. Students can also log in and use the built-in todo-list and assignment tracker, making the app great for planning a study crawl during finals.
 
 ## Tech Stack 
 
