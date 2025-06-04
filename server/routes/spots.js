@@ -326,4 +326,63 @@ router.post("/:id/report", async (req, res) => {
   }
 });
 
+router.put("/:id", upload.single("photo"), async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const spot = await Spot.findById(req.params.id);
+    if (!spot) return res.status(404).json({ error: "Spot not found" });
+
+    if (spot.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: "You are not the owner of this spot" });
+    }
+
+    const { name, location, description, tags, hours } = req.body;
+
+    spot.name = name;
+    spot.location = location;
+    spot.description = description;
+    spot.tags = JSON.parse(tags || "[]");
+    spot.hours = JSON.parse(hours || "{}");
+
+    if (req.file) {
+      // delete old photo
+      if (spot.photoFileId) {
+        try {
+          await gfs.delete(new mongoose.Types.ObjectId(spot.photoFileId));
+        } catch (err) {
+          console.error("Error deleting old image:", err);
+        }
+      }
+
+      // upload new photo
+      const localPath = req.file.path;
+      const readStream = fs.createReadStream(localPath);
+      const uploadStream = gfs.openUploadStream(req.file.filename, {
+        contentType: req.file.mimetype,
+        metadata: { originalname: req.file.originalname },
+      });
+      spot.photoFileId = uploadStream.id;
+
+      await new Promise((resolve, reject) => {
+        readStream.pipe(uploadStream).on("finish", resolve).on("error", reject);
+      });
+
+      fs.unlink(localPath, () => {});
+    }
+
+    await spot.save();
+    res.json({ success: true, spot });
+
+  } catch (err) {
+    if (req.file?.path) {
+      fs.unlink(req.file.path, () => {});
+    }
+    console.error("Error updating spot:", err);
+    res.status(500).json({ error: "Failed to update spot" });
+  }
+});
+
 export default router;

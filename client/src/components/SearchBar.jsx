@@ -26,6 +26,8 @@ export default function SearchBar({ onSearch }) {
     "library",
     "lab",
     "outlet",
+    "on campus",
+    "off campus"
   ];
 
   // Filter tag suggestions based on input
@@ -187,7 +189,7 @@ export default function SearchBar({ onSearch }) {
 
             {/* tag suggestions */}
             {showTagDropdown && tagSuggestions.length > 0 && (
-              <ul className="absolute z-[100px] bg-[#FFFF] border-none rounded-[8px] px-[9px] m-1.5 max-h-20 overflow-auto">
+              <ul className="absolute z-50 bg-[#FFFF] border-none rounded-[8px] px-[9px] m-1.5 max-h-20 overflow-auto">
                 {tagSuggestions
                   .filter((tag) => !selectedTags.includes(tag))
                   .map((tag, index) => (

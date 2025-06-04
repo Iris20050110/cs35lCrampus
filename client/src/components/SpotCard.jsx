@@ -140,11 +140,11 @@ export default function SpotCard({ spot, currentUser }) {
           hours?.close &&
           (isCurrentlyOpen() ? (
             <span className="text-[15px] px-[9px] py-[4px] m-[4px] rounded-full bg-[#305252] text-white">
-              Available
+              OPEN
             </span>
           ) : (
             <span className="text-[13px] px-[9px] py-[4px] m-[4px] rounded-full bg-[#A9A9A9] text-white">
-              NOT AVAILABLE
+              CLOSED
             </span>
           ))}
 

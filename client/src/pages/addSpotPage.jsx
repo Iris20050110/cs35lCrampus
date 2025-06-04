@@ -4,6 +4,7 @@ import axios from "axios";
 import NavBar from "../components/navbar";
 import useAuth from "../hooks/useAuth";
 import LoginRequired from "../components/LoginRequired";
+import SpotForm from "../components/SpotForm"; //added
 
 export default function AddSpotPage() {
   const { loading, isAuthenticated } = useAuth({ redirectIfUnauth: false });
@@ -17,49 +18,6 @@ export default function AddSpotPage() {
   const [photo, setPhoto] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
-  const availableTags = [
-    "quiet",
-    "coffee",
-    "outdoor",
-    "wifi",
-    "group",
-    "noisy",
-    "24/7",
-    "food",
-    "parking",
-    "library",
-    "lab",
-    "outlet",
-  ];
-
-  const toggleTag = (tag) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
-  };
-
-  const validateFileType = (file) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    if (!allowedTypes.includes(file.type)) {
-      setErrorMessage(
-        "Invalid file type. Please upload a JPEG, PNG, or GIF image."
-      );
-      return false;
-    }
-    setErrorMessage("");
-    return true;
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && validateFileType(file)) {
-      setPhoto(file);
-    } else {
-      e.target.value = null; // Reset the input
-      setPhoto(null);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,7 +68,29 @@ export default function AddSpotPage() {
       <NavBar />
       <div className="flex-1 flex justify-center items-start px-4 py-8">
         <div className="w-full max-w-4xl bg-ash rounded-2xl shadow-lg p-8">
-          <h1 className="text-center text-[28px] font-extrabold text-slate mb-6">
+          <SpotForm
+            formTitle="Add a Study Spot"
+            name={name}
+            setName={setName}
+            location={location}
+            setLocation={setLocation}
+            description={description}
+            setDescription={setDescription}
+            openTime={openTime}
+            setOpenTime={setOpenTime}
+            closeTime={closeTime}
+            setCloseTime={setCloseTime}
+            is24Hours={is24Hours}
+            setIs24Hours={setIs24Hours}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            photo={photo}
+            setPhoto={setPhoto}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+            onSubmit={handleSubmit}
+          />
+          {/* <h1 className="text-center text-[28px] font-extrabold text-slate mb-6">
             Add a Study Spot
           </h1>
 
@@ -225,9 +205,58 @@ export default function AddSpotPage() {
             >
               Save Spot
             </button>
-          </form>
+          </form> */}
         </div>
       </div>
     </div>
   );
+
+  
+
+  // const availableTags = [
+  //   "quiet",
+  //   "coffee",
+  //   "outdoor",
+  //   "wifi",
+  //   "group",
+  //   "noisy",
+  //   "24/7",
+  //   "food",
+  //   "parking",
+  //   "library",
+  //   "lab",
+  //   "outlet",
+  //   "off-campus", 
+  //   "on-campus",
+  // ];
+
+  // const toggleTag = (tag) => {
+  //   setSelectedTags((prev) =>
+  //     prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+  //   );
+  // };
+
+  // const validateFileType = (file) => {
+  //   const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  //   if (!allowedTypes.includes(file.type)) {
+  //     setErrorMessage(
+  //       "Invalid file type. Please upload a JPEG, PNG, or GIF image."
+  //     );
+  //     return false;
+  //   }
+  //   setErrorMessage("");
+  //   return true;
+  // };
+
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file && validateFileType(file)) {
+  //     setPhoto(file);
+  //   } else {
+  //     e.target.value = null; // Reset the input
+  //     setPhoto(null);
+  //   }
+  // };
+
+  
 }

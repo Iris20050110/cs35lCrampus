@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import SearchBar from "../components/searchBar";
-import SpotCard from "../components/spotCard";
+import SpotCard from "../components/SpotCard";
 import NavBar from "../components/navbar";
 
 export default function MainPage() {
@@ -109,7 +109,7 @@ export default function MainPage() {
                 checked={showAvailableOnly}
                 onChange={(e) => setShowAvailableOnly(e.target.checked)}
               />
-              <div className="w-14 h-7 bg-gray-200 rounded-[10px] peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-[12px] after:h-6 after:w-4 after:px-[px] after:transition-all peer-checked:bg-[#305252]"></div>
+              <div className="w-14 h-7 bg-gray-200 rounded-[10px] peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-[12px] after:h-6 after:w-4  after:transition-all peer-checked:bg-[#305252]"></div>
               <span className="ml-2 text-sm font-medium text-[#305252]">
                 Show Available Only
               </span>

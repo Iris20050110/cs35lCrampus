@@ -5,6 +5,7 @@ import Review from "../components/Review";
 import NewReview from "../components/NewReview";
 import AverageRating from "../components/AverageRating";
 
+
 export default function MoreInformationPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,6 +22,24 @@ export default function MoreInformationPage() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportCount, setReportCount] = useState(passedSpot?.reportCount || 0);
   const [reportError, setReportError] = useState("");
+
+
+  const [isEditingSpot, setIsEditingSpot] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editLocation, setEditLocation] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editTags, setEditTags] = useState([]);
+  const [editPhoto, setEditPhoto] = useState(null);
+  const [editOpenTime, setEditOpenTime] = useState("");
+  const [editCloseTime, setEditCloseTime] = useState("");
+  const [editIs24Hours, setEditIs24Hours] = useState(false);
+  const [editError, setEditError] = useState("");
+
+  const availableTags = [
+  "quiet", "coffee", "outdoor", "wifi", "group", "noisy", "24/7",
+  "food", "parking", "library", "lab", "outlet", "off-campus", "on-campus"
+  ];
+
 
   const fetchSpotData = useCallback(async () => {
     try {
@@ -150,6 +169,37 @@ export default function MoreInformationPage() {
     (safePage - 1) * reviewsPerPage,
     safePage * reviewsPerPage
   );
+
+  const handleInlineEditSubmit = async () => {
+  try {
+    const formData = new FormData();
+    formData.append("name", editName);
+    formData.append("location", editLocation);
+    formData.append("description", editDescription);
+    formData.append(
+      "hours",
+      JSON.stringify(
+        editIs24Hours
+          ? { open: "12:00am", close: "11:59pm" }
+          : { open: editOpenTime, close: editCloseTime }
+      )
+    );
+    formData.append("tags", JSON.stringify(editTags));
+    if (editPhoto) formData.append("photo", editPhoto);
+
+    await axios.put(`/api/spots/${spotId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+    });
+
+    await fetchSpotData();
+    setIsEditingSpot(false);
+  } catch (err) {
+    console.error("Edit failed", err);
+    setEditError("Failed to update spot.");
+  }
+};
+
   return (
     <div className="w-screen p-8 bg-tan font-[lexend] text-oynx">
       <Link to="/" className="px-4 py-2 bg-slate text-white rounded mb-10">
@@ -164,6 +214,30 @@ export default function MoreInformationPage() {
               <AverageRating reviews={reviewsArr} />
             </div>
             <div className="flex flex-col items-end">
+
+              
+              {currentUser?._id === spot.userId?._id && !isEditingSpot && (
+                <button
+                  onClick={() => {
+                    setIsEditingSpot(true);
+                    setEditName(spot.name);
+                    setEditLocation(spot.location);
+                    setEditDescription(spot.description);
+                    setEditTags(spot.tags || []);
+                    setEditPhoto(null);
+                    setEditOpenTime(spot.hours?.open || "");
+                    setEditCloseTime(spot.hours?.close || "");
+                    setEditIs24Hours(
+                      spot.hours?.open === "12:00am" && spot.hours?.close === "11:59pm"
+                    );
+                  }}
+                  className="px-4 py-2 bg-[#305252] text-white rounded-md hover:bg-[#1f3938] transition-colors text-base font-semibold mb-2"
+                >
+                  Edit
+                </button>
+              )}
+
+
               {currentUser && (
                 <button
                   onClick={() => setShowReportModal(true)}
@@ -210,6 +284,115 @@ export default function MoreInformationPage() {
             </div>
           </div>
         </div>
+        
+        {isEditingSpot && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+            <div className="bg-[#b2d2c3] p-6 rounded-2xl w-full max-w-2xl mx-4 overflow-auto max-h-[90vh]">
+              {/* Edit Form Begins */}
+              <div className="flex flex-col gap-4">
+                <h2 className="text-xl font-bold text-[#305252]">Edit Spot</h2>
+
+                <input
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="Name"
+                  className="p-2 rounded-md bg-white"
+                />
+                <input
+                  value={editLocation}
+                  onChange={(e) => setEditLocation(e.target.value)}
+                  placeholder="Location"
+                  className="p-2 rounded-md bg-white"
+                />
+                <textarea
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  placeholder="Description"
+                  rows={3}
+                  className="p-2 rounded-md bg-white"
+                />
+
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Open (e.g. 9:00am)"
+                    value={editOpenTime}
+                    onChange={(e) => setEditOpenTime(e.target.value)}
+                    disabled={editIs24Hours}
+                    className="flex-1 p-2 rounded-md bg-white"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Close (e.g. 5:00pm)"
+                    value={editCloseTime}
+                    onChange={(e) => setEditCloseTime(e.target.value)}
+                    disabled={editIs24Hours}
+                    className="flex-1 p-2 rounded-md bg-white"
+                  />
+                </div>
+
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={editIs24Hours}
+                    onChange={() => setEditIs24Hours(!editIs24Hours)}
+                  />
+                  Open 24 Hours
+                </label>
+
+                <div className="flex flex-wrap gap-2">
+                  {availableTags.map(tag => (
+                    <button
+                      key={tag}
+                      onClick={() =>
+                        setEditTags(prev =>
+                          prev.includes(tag)
+                            ? prev.filter(t => t !== tag)
+                            : [...prev, tag]
+                        )
+                      }
+                      className={`px-3 py-1 text-sm rounded-full ${
+                        editTags.includes(tag)
+                          ? "bg-[#b6244f] text-white"
+                          : "bg-slate text-white"
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Upload new photo (optional)</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setEditPhoto(e.target.files[0])}
+                    className="block mt-1"
+                  />
+                </div>
+
+                {editError && <p className="text-red-600 text-sm">{editError}</p>}
+
+                <div className="flex gap-3 justify-end">
+                  <button
+                    onClick={handleInlineEditSubmit}
+                    className="bg-[#305252] text-white px-4 py-2 rounded hover:bg-[#1f3938]"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setIsEditingSpot(false)}
+                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+              {/* Edit Form Ends */}
+            </div>
+          </div>
+        )}
 
         <div className="w-[600px] h-auto overflow-hidden rounded-lg mr-20 flex-shrink-0">
           {photoFileId ? (
@@ -299,4 +482,7 @@ export default function MoreInformationPage() {
       )}
     </div>
   );
+
+
+  
 }
