@@ -93,7 +93,7 @@ passport.use(
             name: profile.displayName,
             email: profile.emails[0].value,
             googleId: profile.id,
-            picture: profile.photos[0].value,
+            picture: "/default-profile.png",
           });
         }
         console.log("Google profile info:", profile);
