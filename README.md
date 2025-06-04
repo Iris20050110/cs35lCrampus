@@ -112,10 +112,9 @@ High Level Diagram (only shows relevent, manually coded parts)
 │ │ └── User.js # define the mongoose model for user tasks
 │ │
 │ ├── routes
-│ │ ├── google.js #routes for Google OAuth
-│ │ ├── spots.js # REST methods for spot
-│ │ ├── todos.js # REST methods for todos
-│ │ └── user.js # routs for users
+│ │ ├── google.js # routes for Google OAuth and user management
+│ │ ├── spots.js # routes for study spots
+│ │ └── todos.js # routes for todo tasks
 │ │
 │ ├── uploads # temporarily stores files before using grdifs
 │ │
