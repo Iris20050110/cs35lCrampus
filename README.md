@@ -46,11 +46,11 @@ npm install
 
 ### 3. Configure your 'env' file 
 ```Create a `.env` file in the root directory and add the following:
-MONGO_URI=mongodb+srv://MongoUserName:MongoPassword@cluster35l.numlq0c.mongodb.net/crampusDB?retryWrites=true&w=majority&appName=cluster35l
+MONGO_URI=your-mongodb-uri
+PORT=5000
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_CALLBACK_URL=your-callback-url
-
 ```
 
 ### 4. Start MongoDB
