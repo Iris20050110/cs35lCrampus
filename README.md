@@ -17,7 +17,7 @@ Passport.js with Google OAuth 2.0
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/crampus.git
+git clone https://github.com/yourusername/CS35lCrampus.git
 cd crampus
 ```
 ### 2. Install dependencies 
@@ -111,6 +111,9 @@ High Level Diagram (only shows relevent, manually coded parts)
 * Certificates for studying
 * "study crawl" functionality
 * Admin moderation tools
+* Profile Badges and Frequently Visited
 * Dark mode toggle
+
+
 
 
