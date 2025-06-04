@@ -12,7 +12,8 @@ MongoDB Atlas
 - **Authentication**: 
 Passport.js with Google OAuth 2.0
 
-### Prerequisites
+## Prerequisites
+
 Before you begin, make sure you have these installed:
 
 - Node.js (v18 or v20)
