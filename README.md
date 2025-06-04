@@ -114,7 +114,3 @@ High Level Diagram (only shows relevent, manually coded parts)
 * Dark mode toggle
 
 
-## Made with love by Bruins, for Bruins! 
-
-
-
