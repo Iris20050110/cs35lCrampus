@@ -7,9 +7,9 @@ import AverageRating from "../components/AverageRating";
 
 
 export default function MoreInformationPage() {
-  const location = useLocation();
+  const Location = useLocation();
   const navigate = useNavigate();
-  const passedSpot = location.state?.spot ?? null;
+  const passedSpot = Location.state?.spot ?? null;
   const { id: paramsId } = useParams();
   const spotId = passedSpot?._id || paramsId;
 
@@ -155,7 +155,7 @@ export default function MoreInformationPage() {
     hours = {},
     tags = [],
     reviews: reviewsArr = [],
-    location: address = "",
+    Location: address = "",
     description = "",
   } = spot;
 

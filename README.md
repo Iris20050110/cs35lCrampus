@@ -1,16 +1,19 @@
-# Crampus 
-Crampus is a website that showcases various UCLA study spots, from the Hill to on campus, and even the off campus study spots in Westwood. It can be used by students looking for a certain study spot filtered by building type, outlet availability, and whether there's food nearby. The app prioritizes user engagement, with the ability to upload new study spots that others may not know about, and even leave reviews and ratings on certain spots. Students can also log in and use the built-in todo-list and assignment tracker, making the app great for planning a study crawl during finals.
+# Crampus
+Crampus is a web application designed to help UCLA students discover, review, and plan study sessions at various spots across campus and off campus as well. With features such as filtering by building type, outlet availability, and proximity to food, Crampus is the perfect app for finding the ideal study spot. Users can also contribute by adding new spots and leaving reviews, making it a collaborative platform. Additionally, Crampus offers an integrated todo-list and assignment tracker to help students stay organized during finals.
+
 
 ## Tech Stack 
 
 - **Frontend**: 
-React.js, Tailwind CSS
+    React.js
+    Tailwind CSS
 - **Backend**: 
-Node.js, Express
+    Node.js
+    Express
 - **Database**: 
-MongoDB Atlas
+    MongoDB Atlas
 - **Authentication**: 
-Passport.js with Google OAuth 2.0
+    Passport.js with Google OAuth 2.0
 
 ## Prerequisites
 
@@ -42,7 +45,7 @@ npm install
 ```
 
 ### 3. Configure your 'env' file 
-```
+```Create a `.env` file in the root directory and add the following:
 MONGO_URI=your-mongodb-uri
 PORT=5000
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -133,7 +136,3 @@ High Level Diagram (only shows relevent, manually coded parts)
 * Admin moderation tools
 * Profile Badges and Frequently Visited
 * Dark mode toggle
-
-
-
-
