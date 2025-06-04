@@ -12,6 +12,16 @@ MongoDB Atlas
 - **Authentication**: 
 Passport.js with Google OAuth 2.0
 
+### Prerequisites
+Before you begin, make sure you have these installed:
+
+Node.js (v18 or v20)
+
+MongoDB running locally
+
+```npm``` for package management
+
+
 ## Local Development
 
 ### 1. Clone the repository
@@ -21,8 +31,15 @@ git clone https://github.com/yourusername/CS35lCrampus.git
 cd crampus
 ```
 ### 2. Install dependencies 
+Install backend dependencies:
 ```
+cd server
 npm install 
+```
+Install frontend dependencies:
+```
+cd ../client
+npm install
 ```
 
 ### 3. Configure your 'env' file 
@@ -34,7 +51,12 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_CALLBACK_URL=your-callback-url
 ```
 
-### 4. Start the backend and frontend 
+### 4. Start MongoDB
+```
+mongod
+```
+
+### 5. Start the backend and frontend 
 ```
 cd client 
 npm run dev
