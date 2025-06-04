@@ -226,6 +226,8 @@ export default function MoreInformationPage() {
         </div>
       </div>
 
+...
+
       <div className="mt-8">
         {reviewsArr.length === 0 || reviewsArr === 0 ? (
           <p className="text-lg italic text-gray-600 mb-6">No reviews yet.</p>
@@ -262,6 +264,33 @@ export default function MoreInformationPage() {
         )}
 
         <NewReview spotId={spotId} onReviewAdded={handleReviewAdded} />
+
+        {/* Report Button */}
+        <button
+          onClick={async () => {
+            try {
+              const res = await fetch(`/api/spots/${spotId}/report`, {
+                method: "POST",
+                credentials: "include",
+              });
+              const data = await res.json();
+              if (data.deleted) {
+                alert("This spot was reported 5 times and has been deleted.");
+                window.location.href = "/"; // redirect home
+              } else {
+                alert(
+                  `Report submitted. This spot has now been reported ${data.reportCount} time(s).`
+                );
+              }
+            } catch (err) {
+              console.error("Error reporting spot:", err);
+              alert("Failed to report this spot. Try again.");
+            }
+          }}
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+        >
+          Report This Spot
+        </button>
       </div>
 
       {/* report Modal */}

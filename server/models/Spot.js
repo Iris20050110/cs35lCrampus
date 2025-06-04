@@ -26,7 +26,7 @@ const spotSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  reportCount: {
+  reportsCount: {
     type: Number,
     default: 0,
   },
