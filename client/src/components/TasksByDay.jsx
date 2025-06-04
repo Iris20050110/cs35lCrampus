@@ -24,15 +24,15 @@ export default function TasksByDay() {
 
   const weekStartDate = getWeekStartDate(selectedDate)
   const weekEndDate = new Date(weekStartDate)
-  weekEndDate.setDate(weekStartDate.getDate() + 6);
+  weekEndDate.setDate(weekStartDate.getDate() + 6)
 
   const headerLabel = `${
-    new Date(weekStartDate.getTime()).toLocaleDateString(
+    new Date(weekStartDate.getTime()+ 86400000).toLocaleDateString(
       undefined,
       { month: 'short', day: 'numeric' }
     )
   } - ${
-    new Date(weekEndDate.getTime()).toLocaleDateString(
+    new Date(weekEndDate.getTime()+ 86400000).toLocaleDateString(
       undefined,
       { month: 'short', day: 'numeric' }
     )
@@ -77,7 +77,7 @@ export default function TasksByDay() {
 
       const dayTasks = todos.filter((todo) => {
         const due = new Date(todo.dueDate)
-        due.setDate(due.getDate() + 1)
+        due.setDate(due.getDate())
         return due.toDateString() === currentDay.toDateString()
       });
 
