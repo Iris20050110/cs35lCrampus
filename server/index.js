@@ -16,8 +16,6 @@ import User from "./models/User.js";
 import googleAuthRouter from "./routes/google.js";
 import spotsRouter from "./routes/spots.js";
 import todosRouter from "./routes/todos.js";
-// import authRouter from "./routes/user.js";
-
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -150,7 +148,6 @@ mongoose.connection.on("reconnected", () => {
 
 // routes
 app.use("/api/auth", googleAuthRouter);
-// app.use("/api/auth", authRouter);
 app.use("/api/spots", spotsRouter);
 app.use("/api/todos", todosRouter);
 app.use("/api/tasks", ensureAuth, todosRouter);
