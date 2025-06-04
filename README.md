@@ -15,11 +15,9 @@ Passport.js with Google OAuth 2.0
 ### Prerequisites
 Before you begin, make sure you have these installed:
 
-Node.js (v18 or v20)
-
-MongoDB running locally
-
-```npm``` for package management
+- Node.js (v18 or v20)
+- MongoDB running locally
+- ```npm``` for package management
 
 
 ## Local Development
