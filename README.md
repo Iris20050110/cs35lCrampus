@@ -44,7 +44,7 @@ npm start
 ```
 
 ### Log in 
-Currently only UCLA students can log in to Crampus, given that it requires an active 'ucla.edu' account. 
+Currently only UCLA students can log in; Crampus requires an active 'ucla.edu' account. 
 
 ### Features Roadmap 
 * Interactive map view (ArcGIS or Google Maps)
