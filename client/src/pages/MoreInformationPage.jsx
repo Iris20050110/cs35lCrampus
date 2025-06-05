@@ -156,7 +156,7 @@ export default function MoreInformationPage() {
     hours = {},
     tags = [],
     reviews: reviewsArr = [],
-    Location: address = "",
+    location: address = "",
     description = "",
   } = spot;
 
