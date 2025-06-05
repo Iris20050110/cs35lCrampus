@@ -26,8 +26,8 @@ export default function SearchBar({ onSearch }) {
     "library",
     "lab",
     "outlet",
-    "on campus",
-    "off campus"
+    "on-campus",
+    "off-campus"
   ];
 
   // Filter tag suggestions based on input
