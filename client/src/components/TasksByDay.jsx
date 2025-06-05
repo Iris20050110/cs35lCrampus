@@ -15,28 +15,33 @@ export default function TasksByDay() {
       .catch((err) => console.error('Error fetching todos:', err));
   }, [])
 
+  // use UTC Time for all
   const getWeekStartDate = (date) => {
-    const d = new Date(date)
-    const day = d.getDay()
-    const diff = d.getDate() - day
-    return new Date(d.setDate(diff))
+    const d = new Date(date);
+    const day = d.getUTCDay()
+    const diff = d.getUTCDate() - day
+    d.setUTCDate(diff)
+    return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))
   }
-
+  
   const weekStartDate = getWeekStartDate(selectedDate)
   const weekEndDate = new Date(weekStartDate)
-  weekEndDate.setDate(weekStartDate.getDate() + 6)
-
+  weekEndDate.setUTCDate(weekStartDate.getUTCDate() + 6)
+  
   const headerLabel = `${
-    new Date(weekStartDate.getTime()).toLocaleDateString(
-      undefined,
-      { month: 'short', day: 'numeric' }
-    )
+    new Date(weekStartDate.getTime()).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'UTC',
+    })
   } - ${
-    new Date(weekEndDate.getTime()).toLocaleDateString(
-      undefined,
-      { month: 'short', day: 'numeric' }
-    )
+    new Date(weekEndDate.getTime()).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'UTC',
+    })
   }`
+  
 
   const shiftWeek = (delta) => {
     const d = new Date(selectedDate)
@@ -59,7 +64,7 @@ export default function TasksByDay() {
     } catch (err) {
       console.error('Error toggling todo:', err)
     }
-  };
+  }
 
   const deleteTodo = async (id) => {
     try {
@@ -68,7 +73,7 @@ export default function TasksByDay() {
     } catch (err) {
       console.error('Error deleting todo:', err)
     }
-  };
+  }
 
   const renderWeek = () =>
     Array.from({ length: 7 }).map((_, i) => {
@@ -76,10 +81,10 @@ export default function TasksByDay() {
       currentDay.setDate(currentDay.getDate() + i)
 
       const dayTasks = todos.filter((todo) => {
-        const due = new Date(todo.dueDate)
-        due.setDate(due.getDate() + 1)
-        return due.toDateString() === currentDay.toDateString()
-      });
+        const dueDateString = new Date(todo.dueDate).toLocaleDateString('en-US', { timeZone: 'UTC' });
+        const currentDayString = currentDay.toLocaleDateString('en-US', { timeZone: 'UTC' });
+        return dueDateString === currentDayString;
+      })
 
       return (
         <div
