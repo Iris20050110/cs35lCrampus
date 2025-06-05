@@ -4,6 +4,7 @@ import axios from "axios";
 import Review from "../components/Review";
 import NewReview from "../components/NewReview";
 import AverageRating from "../components/AverageRating";
+import { Pencil } from "lucide-react";
 
 
 export default function MoreInformationPage() {
@@ -205,7 +206,29 @@ export default function MoreInformationPage() {
       <Link to="/" className="px-4 py-2 bg-slate text-white rounded mb-10">
         &lt; Back
       </Link>
-      <h1 className="text-4xl font-bold mt-10 mb-5">{name}</h1>
+      <div className="flex items-center gap-4 mt-10 mb-5">
+        <h1 className="text-4xl font-bold">{name}</h1>
+        {currentUser?._id === spot.userId?._id && !isEditingSpot && (
+          <Pencil
+          onClick={() => {
+            setIsEditingSpot(true);
+            setEditName(spot.name);
+            setEditLocation(spot.location);
+            setEditDescription(spot.description);
+            setEditTags(spot.tags || []);
+            setEditPhoto(null);
+            setEditOpenTime(spot.hours?.open || "");
+            setEditCloseTime(spot.hours?.close || "");
+            setEditIs24Hours(
+              spot.hours?.open === "12:00am" && spot.hours?.close === "11:59pm"
+            );
+          }}
+          className="w-5 h-5 text-[#305252] cursor-pointer hover:text-[#1f3938] transition-colors ml-3"
+          fill="currentColor"
+          stroke="currentColor"
+        />
+        )}
+      </div>
 
       <div className="flex flex-row items-start gap-8 w-full">
         <div className="flex-1 min-w-0">
@@ -214,28 +237,6 @@ export default function MoreInformationPage() {
               <AverageRating reviews={reviewsArr} />
             </div>
             <div className="flex flex-col items-end">
-
-              
-              {currentUser?._id === spot.userId?._id && !isEditingSpot && (
-                <button
-                  onClick={() => {
-                    setIsEditingSpot(true);
-                    setEditName(spot.name);
-                    setEditLocation(spot.location);
-                    setEditDescription(spot.description);
-                    setEditTags(spot.tags || []);
-                    setEditPhoto(null);
-                    setEditOpenTime(spot.hours?.open || "");
-                    setEditCloseTime(spot.hours?.close || "");
-                    setEditIs24Hours(
-                      spot.hours?.open === "12:00am" && spot.hours?.close === "11:59pm"
-                    );
-                  }}
-                  className="px-4 py-2 bg-[#305252] text-white rounded-md hover:bg-[#1f3938] transition-colors text-base font-semibold mb-2"
-                >
-                  Edit
-                </button>
-              )}
 
 
               {currentUser && (
@@ -395,6 +396,8 @@ export default function MoreInformationPage() {
         )}
 
         <div className="w-[600px] h-auto overflow-hidden rounded-lg mr-20 flex-shrink-0">
+
+
           {photoFileId ? (
             <img
               src={`/api/spots/image/${photoFileId}`}
