@@ -72,6 +72,7 @@ Currently only UCLA students can log in; Crampus requires an active 'ucla.edu' a
 
 ### Diagram / Structure of Code
 High Level Diagram (only shows relevent, manually coded parts)
+
 ```
 ├── client
 │ ├── tailwind configuration files
