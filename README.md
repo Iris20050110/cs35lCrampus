@@ -126,6 +126,7 @@ High Level Diagram (only shows relevent, manually coded parts)
 │ └── package.json # dependencies & scripts
 │
 ├── .gitignore # files to ignore in Git
+
 ```
 
 ### Future Features Roadmap 
